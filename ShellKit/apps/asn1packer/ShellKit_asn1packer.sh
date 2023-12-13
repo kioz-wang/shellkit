@@ -26,7 +26,7 @@ done; unset i
 skechod "[${app}]     ofile    = ${ofile}"
 skechod
 
-declare -r _conf_file=config.asn1
+declare -r _conf_file=${ShellKit_TEMP}/config.asn1
 
 declare -i ret=${SHELLKIT_RET_SUCCESS}
 

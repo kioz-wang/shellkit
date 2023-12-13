@@ -11,7 +11,7 @@ SHELLKIT_LOG_DEBUG_ENABLE=true
 assert_dirs_w "${BASH_SOURCE[0]%/*}/TEST/"
 cd "${BASH_SOURCE[0]%/*}/TEST/" || exit 1
 
-declare -r app=CASE
+declare -r app=CASE::asn1packer
 
 if ../ShellKit_asn1packer.sh bin0 bin1 bin2 bin\ name\ include\ spaces binpack_012space; then
     skechoi "[${app}] pack binpack_012space"

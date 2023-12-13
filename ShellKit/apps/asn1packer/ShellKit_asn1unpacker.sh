@@ -35,7 +35,7 @@ else
 fi
 skechod
 
-declare -r _parse_file=parse.asn1
+declare -r _parse_file=${ShellKit_TEMP}/parse.asn1
 
 declare -i ret=${SHELLKIT_RET_SUCCESS}
 

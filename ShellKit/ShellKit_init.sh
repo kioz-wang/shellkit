@@ -8,7 +8,9 @@ else
 fi
 declare -rx ShellKit_ROOT
 
-declare -rx ShellKit_Version=v23.9.16
+declare -rx ShellKit_Version=v23.12.14
+
+declare -rx ShellKit_TEMP=${ShellKit_TEMP:-/tmp}
 
 source "${ShellKit_ROOT}/ShellKit_assert_env.sh"
 source "${ShellKit_ROOT}/ShellKit_console_codes.sh"

@@ -11,7 +11,7 @@ SHELLKIT_LOG_DEBUG_ENABLE=true
 assert_dirs_w "${BASH_SOURCE[0]%/*}/TEST/"
 cd "${BASH_SOURCE[0]%/*}/TEST/" || exit 1
 
-declare -r app=DATAGEN
+declare -r app=DATAGEN::asn1packer
 
 for (( i=0; i<10; i++ )); do
     bin_sz=0x$(${OPENSSL} rand -hex 3)

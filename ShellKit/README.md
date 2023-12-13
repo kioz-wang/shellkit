@@ -16,12 +16,14 @@ date +v%y.%-m.%-d
 
 执行 `source /path/to/ShellKit_init.sh` 以初始化 `ShellKit` 运行时。
 
-首先导出两个环境变量：
+首先导出几个环境变量：
 
 - `ShellKit_ROOT`
     - `ShellKit` 根目录的绝对路径（`ShellKit_init.sh` 所在的目录）
 - `ShellKit_Version`
     - `ShellKit` 版本号
+- `ShellKit_TEMP`
+    - 除输入输出外，`ShellKit` 可读写的目录（通过环境变量配置，默认为 `/tmp`）
 
 > `ShellKit_ROOT` 通过 `realpath` 命令获取，移植时需要注意这个地方
 
@@ -355,7 +357,8 @@ skechod
 **[P.rapp.8]** 初始化全局资源
 
 ```bash
-declare -r _global_resource=resources
+declare -r _global_static_resource=resources
+declare -r _global_dynamic_resource=${ShellKit_TEMP}/resources
 ```
 
 **[P.rapp.9]** *初始化全局 ret*
