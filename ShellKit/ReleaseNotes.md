@@ -1,3 +1,9 @@
+# Release Note v23.12.14
+
+[ShellKit]
+
+- 新增环境变量 `ShellKit_TEMP`，用于限定除输入输出外的可读写目录
+
 # Release Note v23.9.16
 
 [ShellKit]
