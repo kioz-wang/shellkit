@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ShellKit_ROOT=${ShellKit_ROOT:-"${BASH_SOURCE[0]%/*}/../../ShellKit"}
-# shellcheck source=../../ShellKit/ShellKit_init.sh
+ShellKit_ROOT=${ShellKit_ROOT:-"${BASH_SOURCE[0]%/*}/../.."}
+# shellcheck source=../../ShellKit_init.sh
 source "${ShellKit_ROOT}/ShellKit_init.sh" || exit 1
 # shellcheck disable=SC2034
 # SHELLKIT_LOG_VERB_ENABLE=true

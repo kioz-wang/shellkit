@@ -82,9 +82,23 @@ Parameter Expansion
 
 ### apps
 
-> 更多内容可见 README [apps](apps/README.md)
+#### asn1packer
 
-## 其他模块
+> README [asn1packer](apps/asn1packer/README.md)
+
+#### secure_asn1packer
+
+> README [secure_asn1packer](apps/secure_asn1packer/README.md)
+
+### demos
+
+#### color_timer
+
+> README [color_timer](demos/color_timer/README.md)
+
+#### painter
+
+> README [painter](demos/painter/README.md)
 
 ## APIs
 
