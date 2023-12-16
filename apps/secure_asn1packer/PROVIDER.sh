@@ -3,6 +3,11 @@
 declare -r AES256CBC_HEXKEY="f8991ccc46e146b7bc5cb0c5917979c4c1f06747f1300552e880b25466684231"
 declare -r AES256CBC_HEXIV="2ea699bf38bc6e1779e26b0a8eb21b64"
 
+# openssl genrsa -out rsa2048.key 2048
+declare -r _gs_ASYMKEY_FILE=${ASYMKEY_FILE:-$(${DIRNAME} "${BASH_SOURCE[0]}")/rsa2048.key}
+# openssl rsa -in rsa2048.key -pubout -out rsa2048.puk
+declare -r _gs_ASYMPUK_FILE=${ASYMPUK_FILE:-$(${DIRNAME} "${BASH_SOURCE[0]}")/rsa2048.puk}
+
 function secure_asn1packer_encrypt() {
     local plain_file=$1
     local cipher_file=$2
@@ -17,29 +22,24 @@ function secure_asn1packer_decrypt() {
     ${OPENSSL} aes-256-cbc -K ${AES256CBC_HEXKEY} -iv ${AES256CBC_HEXIV} -d -in "${cipher_file}" -out "${plain_file}"
 }
 
-# openssl genrsa -out rsa2048.key 2048
-declare -r ASYMKEY_FILE=${ASYMKEY_FILE:-$(${DIRNAME} "${BASH_SOURCE[0]}")/rsa2048.key}
-# openssl rsa -in rsa2048.key -pubout -out rsa2048.puk
-declare -r ASYMPUK_FILE=${ASYMPUK_FILE:-$(${DIRNAME} "${BASH_SOURCE[0]}")/rsa2048.puk}
-
 function secure_asn1packer_sign() {
     local raw_file=$1
     local sign_file=$2
 
-    if ! file_access_r "${ASYMKEY_FILE}"; then
+    if ! file_access_r "${_gs_ASYMKEY_FILE}"; then
         return "${SHELLKIT_RET_FILEIO}"
     fi
-    ${OPENSSL} dgst -sha512 -sign "${ASYMKEY_FILE}" -out "${sign_file}" "${raw_file}"
+    ${OPENSSL} dgst -sha512 -sign "${_gs_ASYMKEY_FILE}" -out "${sign_file}" "${raw_file}"
 }
 
 function secure_asn1packer_verify() {
     local raw_file=$1
     local sign_file=$2
 
-    if ! file_access_r "${ASYMPUK_FILE}"; then
+    if ! file_access_r "${_gs_ASYMPUK_FILE}"; then
         return "${SHELLKIT_RET_FILEIO}"
     fi
-    ${OPENSSL} dgst -sha512 -verify "${ASYMPUK_FILE}" -signature "${sign_file}" "${raw_file}" > /dev/null
+    ${OPENSSL} dgst -sha512 -verify "${_gs_ASYMPUK_FILE}" -signature "${sign_file}" "${raw_file}" > /dev/null
 }
 
 function secure_asn1packer_join_signature() {

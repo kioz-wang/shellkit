@@ -37,3 +37,12 @@ if [ -d "${ShellKit_ROOT}/common" ]; then
         fi
     done; unset i
 fi
+
+################################################################################
+
+if [ -v app ] && [ -n "${ShellKit_APPDIR}" ]; then
+    if [ -r "${ShellKit_APPDIR}/PROVIDER.sh" ]; then
+        # shellcheck source=/dev/null
+        source "${ShellKit_APPDIR}/PROVIDER.sh"
+    fi
+fi

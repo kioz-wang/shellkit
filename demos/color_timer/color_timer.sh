@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 
-ShellKit_ROOT=${ShellKit_ROOT:-"${BASH_SOURCE[0]%/*}/../.."}
+declare -r app=color_alarm
+
+ShellKit_APPDIR="${BASH_SOURCE[0]%/*}"
 # shellcheck source=../../ShellKit_init.sh
-source "${ShellKit_ROOT}/ShellKit_init.sh" || exit 1
+source "${ShellKit_ROOT:-"${ShellKit_APPDIR}/../.."}/ShellKit_init.sh" || exit 1
 # shellcheck disable=SC2034
 # SHELLKIT_LOG_VERB_ENABLE=true
 # shellcheck disable=SC2034
 # SHELLKIT_LOG_DEBUG_ENABLE=true
-
-source "${BASH_SOURCE[0]%/*}/ASSERT_ENV.sh"
-
-declare -r app=color_alarm
 
 # shellcheck disable=SC2155
 declare -r STYLE_YEAR=$(ShellKit_ccode_SGR_Color256 -f -r 160 -g 160 -b 160 && ShellKit_ccode_SGR_Style italic)

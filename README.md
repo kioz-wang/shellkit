@@ -12,7 +12,9 @@ date +v%y.%-m.%-d
 
 非正式的版本号中，可以使用形如 `-suffix.1` 的后缀。
 
-## 运行时初始化
+## 运行时
+
+### 初始化
 
 执行 `source /path/to/ShellKit_init.sh` 以初始化 `ShellKit` 运行时。
 
@@ -27,29 +29,38 @@ date +v%y.%-m.%-d
 
 > `ShellKit_ROOT` 通过 `realpath` 命令获取，移植时需要注意这个地方
 
-然后依次初始化以下基础模块（**应当始终保证基础模块可以成功初始化**）：
+然后依次初始化以下模块（**应当始终保证这些模块可以成功初始化**）：
 
 1. assert_env
 2. console_codes
 3. log
 4. common
 
-## 基础模块
+### 可读写目录
+
+运行时只会读写如下目录：
+
+- 输入所在的目录
+- 输出所在的目录
+- `ShellKit_TEMP` 指定的目录
+
+## 运行时模块
+
+模块文件不具备可执行权限。使用 `source` 导入模块文件，以向当前上下文提供其能力。
 
 ### assert_env
 
-该模块只有一个单独的文件 `ShellKit_assert_env.sh`，配置了 `ShellKit` 用到的所有系统命令的绝对路径。由于路径的配置使用了这种写法，所以允许外部通过环境变量覆盖：
+`ShellKit_assert_env.sh` 中约定了系统命令的注册信息三元组 `einfo(ename epath echeck)`，实现了函数 `ShellKit_assert_env` 对注册信息执行断言：
 
-```
-Parameter Expansion
+- 重复的注册将被忽略
+- 缺少 `echeck` 则不做检查
+- 断言失败，立即终止运行时所在进程
 
-    ${parameter:-word}
-        Use Default Values.  If parameter is unset or null, the expansion of word is substituted.  Otherwise, the value of parameter is substituted.
-```
+`einfo` 被追加到 `ShellKit_ENV_lst` 中，最后遍历数组，执行断言，以保证所有系统命令的可用性。
 
-执行该模块的初始化，以保证所有系统命令的可用性。
+> 移植时根据初始化错误提示，逐个修正系统命令的注册信息。
 
-> 移植时根据初始化错误提示，逐个修正系统命令的绝对路径
+如果运行时由应用初始化，那么也叫应用运行时。在应用运行时中，如果应用所在目录下存在 `ASSERT_ENV.sh` 文件，那么会优先对其执行断言。
 
 ### console_codes
 
@@ -80,55 +91,86 @@ Parameter Expansion
     - 实现了基于文件的大小获取、哈希、`base64` 编码等功能
     - 包装了文件/目录读写权限判定函数，可用于 `if` 条件表达式
 
-### apps
+最后，在常规的应用运行时（不包含 `tgen`, `tcase`）中，会尝试导入应用所在目录下的 `PROVIDER.sh` 文件。
 
-#### asn1packer
+## 资源
+
+资源（resource）是特殊的常量或变量。`ShellKit` 约定了资源的活动性：静态（static）和动态（dynamic），以及资源的活动范围：全局（global）和局部（local）。
+
+下面的表格梳理了关于资源的各种概念，并给出了命名要求：
+
+|prefix |static         |dynamic        |/|
+|-------|---------------|---------------|--|
+|global |`_gs_`\|`_s_`  |`_gd_`         |限定在 `ShellKit_TEMP` 指定的目录下|
+|local  |`_ls_`\|`_s_`  |`_ld_`\|`_`    |生命周期较短，使用灵活|
+|/|总是安全的；通常不需要严格区分活动范围|保持谨慎：初始化和释放|/|
+
+> 输入输出是特殊的资源。
+
+## app
+
+具备可执行权限，并且具备直接的输入输出处理能力的文件，称为应用（application）文件。
+
+`ShellKit` 为其约定了两种流程规范：`rapp` 和 `app`。两者的主要区别是，`app` 的主程序实现为 `main` 函数，整体结构更清晰；`rapp` 更加灵活，便于实现需要复杂资源管理的程序。
+
+应用中可以调用另一个应用，以获取其实现的通用能力。
+
+### asn1packer
 
 > README [asn1packer](apps/asn1packer/README.md)
 
-#### secure_asn1packer
+### secure_asn1packer
 
 > README [secure_asn1packer](apps/secure_asn1packer/README.md)
 
-### demos
+## demo
 
-#### color_timer
+例程是特殊的应用，通常用于功能演示，而非提供通用能力。
+
+### color_timer
 
 > README [color_timer](demos/color_timer/README.md)
 
-#### painter
+### painter
 
 > README [painter](demos/painter/README.md)
+
+## 测试
+
+> `tgen` 和 `tcase` 都是特殊的应用。
+
+### tgen
+
+执行应用所在目录下的 `TEST_DATAGEN.sh` 以生成测试数据。
+
+### tcase
+
+执行应用所在目录下的 `TEST_CASE.sh` 以执行测试用例。
 
 ## APIs
 
 ### assert_env
 
-> 表格主体使用该命令生成
-> ```bash
-> grep export /path/to/ShellKit_assert_env.sh | sed -r 's/.*\{(.*):-(.*)\}/\| \1\t\| \2 \|/g'
-> ```
-
-| command | path |
-| ------- | ---- |
-| CAT   | /usr/bin/cat |
-| ECHO  | /usr/bin/echo |
-| OPENSSL       | /usr/bin/openssl |
-| SED   | /usr/bin/sed |
-| AWK   | /usr/bin/awk |
-| BASENAME      | /usr/bin/basename |
-| DIRNAME       | /usr/bin/dirname |
-| REALPATH      | /usr/bin/realpath |
-| RM    | /usr/bin/rm |
-| WC    | /usr/bin/wc |
-| LS    | /usr/bin/ls |
-| PRINTF        | /usr/bin/printf |
-| HEAD  | /usr/bin/head |
-| TAIL  | /usr/bin/tail |
-| GREP  | /usr/bin/grep |
-| DD    | /usr/bin/dd |
-| MV    | /usr/bin/mv |
-| SLEEP | /usr/bin/sleep |
+```
+einfo name(ECHO) path(/usr/bin/echo) check(--version)
+einfo name(CAT) path(/usr/bin/cat) check(--version)
+einfo name(SLEEP) path(/usr/bin/sleep) check(--version)
+einfo name(OPENSSL) path(/usr/bin/openssl) check(version)
+einfo name(SED) path(/usr/bin/sed) check(--version)
+einfo name(AWK) path(/usr/bin/awk) check(--version)
+einfo name(BASENAME) path(/usr/bin/basename) check(--version)
+einfo name(DIRNAME) path(/usr/bin/dirname) check(--version)
+einfo name(REALPATH) path(/usr/bin/realpath) check(--version)
+einfo name(RM) path(/usr/bin/rm) check(--version)
+einfo name(WC) path(/usr/bin/wc) check(--version)
+einfo name(LS) path(/usr/bin/ls) check(--version)
+einfo name(PRINTF) path(/usr/bin/printf) check(--version)
+einfo name(HEAD) path(/usr/bin/head) check(--version)
+einfo name(TAIL) path(/usr/bin/tail) check(--version)
+einfo name(GREP) path(/usr/bin/grep) check(--version)
+einfo name(DD) path(/usr/bin/dd) check(--version)
+einfo name(MV) path(/usr/bin/mv) check(--version)
+```
 
 ### console_codes
 
@@ -321,43 +363,31 @@ shift $((OPTIND - 1)); unset OPTIND
 
 #### raw app
 
-**[P.rapp.0]** *初始化运行时*
+**[P.rapp.0]** *定义 app 名*
 
 ```bash
-ShellKit_ROOT=${ShellKit_ROOT:-"${BASH_SOURCE[0]%/*}/../.."}
+declare -r app="app_name"
+```
+
+**[P.rapp.1]** *初始化应用运行时*
+
+```bash
+ShellKit_APPDIR="${BASH_SOURCE[0]%/*}"
 # shellcheck source=../../ShellKit_init.sh
-source "${ShellKit_ROOT}/ShellKit_init.sh" || exit 1
+source "${ShellKit_ROOT:-"${ShellKit_APPDIR}/../.."}/ShellKit_init.sh" || exit 1
 # shellcheck disable=SC2034
-SHELLKIT_LOG_VERB_ENABLE=true
+# SHELLKIT_LOG_VERB_ENABLE=true
 # shellcheck disable=SC2034
-SHELLKIT_LOG_DEBUG_ENABLE=true
+# SHELLKIT_LOG_DEBUG_ENABLE=true
 ```
 
-**[P.rapp.1]** ASSERT_ENV（系统命令检查）
+**[P.rapp.2]** 初始化全局常量
 
-```bash
-source "${BASH_SOURCE[0]%/*}/ASSERT_ENV.sh"
-```
+**[P.rapp.3]** 复杂命令行参数（complex arguments）解析
 
-**[P.rapp.2]** PROVIDER（导入接口实现）
+**[P.rapp.4]** 原始命令行参数（raw arguments）解析
 
-```bash
-source "${BASH_SOURCE[0]%/*}/PROVIDER.sh"
-```
-
-**[P.rapp.3]** *定义 app 名*
-
-```bash
-declare -r app=app_name
-```
-
-**[P.rapp.4]** 初始化全局常量
-
-**[P.rapp.5]** 复杂命令行参数（complex arguments）解析
-
-**[P.rapp.6]** 原始命令行参数（raw arguments）解析
-
-**[P.rapp.7]** dump 命令行参数
+**[P.rapp.5]** dump 命令行参数
 
 ```bash
 skechod "[${app}] params:"
@@ -368,28 +398,19 @@ skechod "[${app}]     ofile    = ${ofile}"
 skechod
 ```
 
-**[P.rapp.8]** 初始化全局资源
-
-```bash
-declare -r _global_static_resource=resources
-declare -r _global_dynamic_resource=${ShellKit_TEMP}/resources
-```
-
-**[P.rapp.9]** *初始化全局 ret*
+**[P.rapp.6]** *初始化全局 ret*
 
 ```bash
 declare -i ret=${SHELLKIT_RET_SUCCESS}
 ```
 
-**[P.rapp.10]** 声明（或初始化）全局变量
+**[P.rapp.7]** 声明（或初始化）全局变量
 
-**[P.rapp.11]** 定义子函数
+**[P.rapp.8]** 定义子函数
 
-**[P.rapp.12]** *实现主程序*
+**[P.rapp.9]** *实现主程序*
 
-**[P.rapp.13]** 释放全局资源
-
-**[P.rapp.14]** *exit*
+**[P.rapp.10]** *exit*
 
 ```bash
 exit ${ret}
@@ -397,25 +418,19 @@ exit ${ret}
 
 #### app
 
-**[P.app.0]** *初始化运行时*
+**[P.app.0]** *定义 app 名*
 
-**[P.app.1]** ASSERT_ENV（系统命令检查）
+**[P.app.1]** *初始化应用运行时*
 
-**[P.app.2]** PROVIDER（导入接口实现）
+**[P.app.2]** 初始化全局常量
 
-**[P.app.3]** *定义 app 名*
+**[P.app.3]** 声明（或初始化）全局变量
 
-**[P.app.4]** 初始化全局资源
+**[P.app.4]** 定义子函数
 
-**[P.app.5]** 初始化全局常量
+**[P.app.5]** *定义 main 函数*
 
-**[P.app.6]** 声明（或初始化）全局变量
-
-**[P.app.7]** 定义子函数
-
-**[P.app.8]** *定义 main 函数*
-
-**[P.app.9]** *调用 main 函数*
+**[P.app.6]** *调用 main 函数*
 
 ```bash
 main "$@"
@@ -449,34 +464,34 @@ return ${ret}
 
 #### TEST_DATAGEN
 
-**[P.tgen.0]** *初始化运行时*
+**[P.tgen.0]** *定义 tgen 名*
 
-**[P.tgen.1]** *进入 TEST 目录*
+```bash
+declare -r tgen="tgen(app_name)"
+```
+
+**[P.tgen.1]** *初始化应用运行时*
+
+**[P.tgen.2]** *进入 TEST 目录*
 
 ```bash
 assert_dirs_w "${BASH_SOURCE[0]%/*}/TEST/"
 cd "${BASH_SOURCE[0]%/*}/TEST/" || exit 1
 ```
 
-**[P.tgen.2]** *定义 tgen 名*
-
-```bash
-declare -r app="DATAGEN::test_name"
-```
-
 **[P.tgen.3]** *生成测试数据*
 
 #### TEST_CASE
 
-**[P.tcase.0]** *初始化运行时*
-
-**[P.tcase.1]** *进入 TEST 目录*
-
-**[P.tcase.2]** *定义 tcase 名*
+**[P.tcase.0]** *定义 tcase 名*
 
 ```bash
-declare -r app="CASE::test_name"
+declare -r tcase="tcase(app_name)"
 ```
+
+**[P.tcase.1]** *初始化应用运行时*
+
+**[P.tcase.2]** *进入 TEST 目录*
 
 **[P.tcase.3]** *实现测试用例*
 
@@ -484,31 +499,36 @@ declare -r app="CASE::test_name"
 
 **[P.prov.0]** 初始化全局常量
 
-**[P.prov.1]** *实现接口函数*
+**[P.prov.1]** 声明（或初始化）全局变量
+
+**[P.prov.2]** *实现接口函数*
 
 #### ASSERT_ENV
 
-**[P.assertenv.0]** *初始化系统命令变量*
+**[P.assertenv.0]** 命令实现
+
+**[P.assertenv.1]** *命令注册*
 
 ```bash
-TPUT=${TPUT:-/usr/bin/tput}
+declare -a ShellKit_ENV_lst=()
+
+# shellcheck disable=SC2034
+declare -a ShellKit_ENV_TPUT=(TPUT /usr/bin/tput -V)
+ShellKit_ENV_lst+=(ShellKit_ENV_TPUT[@])
+# shellcheck disable=SC2034
+declare -a ShellKit_ENV_SLEEP=(SLEEP _sleep)
+ShellKit_ENV_lst+=(ShellKit_ENV_SLEEP[@])
 ```
 
-**[P.assertenv.1]** 定义系统命令存在性检查函数
+**[P.assertenv.2]** *命令断言*
 
 ```bash
-function CHECK_TPUT() {
-    ${TPUT} -V > /dev/null
-}
-```
+# echo "AssertEnv following (${BASH_SOURCE[0]})"
+for ShellKit_ENV in "${ShellKit_ENV_lst[@]}"; do
+    ShellKit_assert_env "${ShellKit_ENV}"
+done; unset ShellKit_ENV
 
-**[P.assertenv.2]** 执行系统命令存在性检查
-
-```bash
-true    \
-    && CHECK_DATE        \
-    && CHECK_TPUT        \
-    || exit 1
+unset ShellKit_ENV_lst
 ```
 
 ### 编码规则（Rule）
