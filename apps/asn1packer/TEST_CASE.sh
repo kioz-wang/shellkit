@@ -13,14 +13,14 @@ SHELLKIT_LOG_DEBUG_ENABLE=true
 assert_dirs_w "${ShellKit_APPDIR}/TEST/"
 cd "${ShellKit_APPDIR}/TEST/" || exit 1
 
-if ../ShellKit_asn1packer.sh bin0 bin1 bin2 bin\ name\ include\ spaces binpack_012space; then
+if ../ShellKit_asn1pack.sh bin0 bin1 bin2 bin\ name\ include\ spaces binpack_012space; then
     skechoi "[${tcase}] pack binpack_012space"
 else
     skechow "[${tcase}] fail to pack binpack_012space ($?)"
     exit 1
 fi
 
-if ../ShellKit_asn1packer.sh  bin7 bin6 binpack_76; then
+if ../ShellKit_asn1pack.sh  bin7 bin6 binpack_76; then
     skechoi "[${tcase}] pack binpack_76"
 else
     skechow "[${tcase}] fail to pack binpack_76 ($?)"
@@ -31,7 +31,7 @@ if dir_access_w dump_binpack_012space; then
     rm -rf dump_binpack_012space
 fi
 mkdir dump_binpack_012space
-if ../ShellKit_asn1unpacker.sh binpack_012space dump_binpack_012space 2; then
+if ../ShellKit_asn1unpack.sh binpack_012space dump_binpack_012space 2; then
     skechoi "[${tcase}] unpack idx 2 of binpack_012space to dump_binpack_012space"
 else
     skechow "[${tcase}] fail to unpack idx 2 of binpack_012space to dump_binpack_012space ($?)"
@@ -42,7 +42,7 @@ if dir_access_w dump_binpack_76; then
     rm -rf dump_binpack_76
 fi
 mkdir dump_binpack_76
-if ../ShellKit_asn1unpacker.sh binpack_76 dump_binpack_76; then
+if ../ShellKit_asn1unpack.sh binpack_76 dump_binpack_76; then
     skechoi "[${tcase}] unpack all of binpack_76 to dump_binpack_76"
 else
     skechow "[${tcase}] fail to unpack all of binpack_76 to dump_binpack_76 ($?)"

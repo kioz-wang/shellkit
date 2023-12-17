@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare -r app=secure_asn1unpacker
+declare -r app=sasn1unpack
 
 ShellKit_APPDIR="${BASH_SOURCE[0]%/*}"
 # shellcheck source=../../ShellKit_init.sh
@@ -50,7 +50,7 @@ if [ ${ret} -eq 0 ]; then
 fi
 
 if [ ${ret} -eq 0 ]; then
-    if "${ShellKit_ROOT}/apps/asn1packer/ShellKit_asn1unpacker.sh" "${_ld_raw_file}" "${odir}"; then
+    if "${ShellKit_ROOT}/apps/asn1packer/ShellKit_asn1unpack.sh" "${_ld_raw_file}" "${odir}"; then
         skechov "[${app}] asn1unpack ${_ld_raw_file}"
     else
         skechoe "[${app}] fail to asn1unpack ${_ld_raw_file} ($?)"

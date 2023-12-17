@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare -r app=asn1unpacker
+declare -r app=asn1unpack
 
 ShellKit_APPDIR="${BASH_SOURCE[0]%/*}"
 # shellcheck source=../../ShellKit_init.sh

@@ -54,9 +54,9 @@ date +v%y.%-m.%-d
 
 `ShellKit_assert_env.sh` 中约定了系统命令的注册信息三元组 `einfo(ename epath echeck)`，实现了函数 `ShellKit_assert_env` 对注册信息执行断言：
 
-- 重复的注册将被忽略
-- 缺少 `echeck` 则不做检查
-- 断言失败，立即终止运行时所在进程
+1. 重复的注册将被忽略
+2. 缺少 `echeck` 则不做检查
+3. 断言失败，立即终止运行时所在进程
 
 `einfo` 被追加到 `ShellKit_ENV_lst` 中，最后遍历数组，执行断言，以保证所有系统命令的可用性。
 

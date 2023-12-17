@@ -13,7 +13,7 @@ SHELLKIT_LOG_DEBUG_ENABLE=true
 assert_dirs_w "${ShellKit_APPDIR}/TEST/"
 cd "${ShellKit_APPDIR}/TEST/" || exit 1
 
-if ../ShellKit_secure_asn1packer.sh bin0 bin1 bin2 bin\ name\ include\ spaces binpack; then
+if ../ShellKit_secure_asn1pack.sh bin0 bin1 bin2 bin\ name\ include\ spaces binpack; then
     skechoi "[${tcase}] secure pack binpack"
 else
     skechow "[${tcase}] fail to secure pack binpack ($?)"
@@ -24,7 +24,7 @@ if dir_access_w dump_binpack; then
     rm -rf dump_binpack
 fi
 mkdir dump_binpack
-if ../ShellKit_secure_asn1unpacker.sh binpack dump_binpack; then
+if ../ShellKit_secure_asn1unpack.sh binpack dump_binpack; then
     skechoi "[${tcase}] secure unpack binpack to dump_binpack"
 else
     skechow "[${tcase}] fail to secure unpack binpack to dump_binpack ($?)"
