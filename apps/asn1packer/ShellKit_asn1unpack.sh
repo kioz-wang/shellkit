@@ -49,11 +49,11 @@ function parse_dump_by_idx() {
     local check_hash
     local -i flag_extglob=0
 
-    parse_result_length=$(${GREP} -A 3 ifile${parse_idx} "${_gd_parse_file}" | ${SED} -n 2p)
+    parse_result_length=$(${GREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SED} -n 2p)
     parse_result_length=0x${parse_result_length##*:}
     skechod "[${app}] [parse]:${parse_idx} length ${parse_result_length}"
 
-    parse_result_hash=$(${GREP} -A 3 ifile${parse_idx} "${_gd_parse_file}" | ${SED} -n 3p)
+    parse_result_hash=$(${GREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SED} -n 3p)
     parse_result_hash=${parse_result_hash##*:}
     ${ECHO} -n "${parse_result_hash}" > "${odir}/ifile${parse_idx}.hash"
     skechov "[${app}] [parse]:${parse_idx} hash ${parse_result_hash} -> ${odir}/ifile${parse_idx}.hash"
