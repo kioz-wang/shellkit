@@ -47,6 +47,7 @@ function parse_dump_by_idx() {
     local parse_result_length
     local parse_result_hash
     local check_hash
+    local -i flag_extglob=0
 
     parse_result_length=$(${GREP} -A 3 ifile${parse_idx} "${_gd_parse_file}" | ${SED} -n 2p)
     parse_result_length=0x${parse_result_length##*:}
@@ -63,6 +64,15 @@ function parse_dump_by_idx() {
     skechov "[${app}] [parse]:${parse_idx} context -> ${odir}/ifile${parse_idx}"
 
     check_hash=$(file_get_hash "${odir}/ifile${parse_idx}" sha256 | ${SED} 's/[a-z]/\u&/g')
+    if shopt -q extglob; then
+        flag_extglob=1
+    else
+        shopt -s extglob
+    fi
+    check_hash=${check_hash##*(00)}
+    if [ ${flag_extglob} -eq 0 ]; then
+        shopt -u extglob
+    fi
     if [ "${check_hash}" = "${parse_result_hash}" ]; then
         skechod "[${app}] [parse]:${parse_idx} integrity check pass"
     else
