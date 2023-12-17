@@ -2,6 +2,8 @@
 
 A great baSh-oriented software develop Kits.
 
+see [Release Note](ReleaseNotes.md)
+
 ## 版本号
 
 `ShellKit` 并没有使用常见的[语义化版本](https://semver.org/lang/zh-CN/)，而是采用了简单清晰的基于日期的版本规则，格式等同如下命令的输出：

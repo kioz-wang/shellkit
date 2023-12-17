@@ -12,7 +12,7 @@ function file_get_hash() {
     local openssl_dgst=$2
     local openssl_dgst_result
     openssl_dgst_result=$(${OPENSSL} dgst "-${openssl_dgst}" "${file_path}")
-    ${ECHO} -n "${openssl_dgst_result#[^=]*= }"
+    ${ECHO} -n "${openssl_dgst_result##*= }"
 }
 declare -frx file_get_hash
 
