@@ -1,3 +1,8 @@
+# Release Note v23.12.20
+
+- [assert_env] 支持断言带空格的系统命令，如 `toybox sed`
+- [demo:color_timer] 新增演示使用 `false` 禁用系统命令
+
 # Release Note v23.12.17
 
 - [assert_env] 

@@ -32,7 +32,7 @@ function ShellKit_assert_env() {
         # echo "einfo Force (${ename}=${epath})"
         return
     fi
-    if ! "${epath}" "${echeck[@]}" &> /dev/null; then
+    if ! ${epath} "${echeck[@]}" &> /dev/null; then
         echo "FailAssertEnv (${ename}=${epath}) ${echeck[*]}"
         exit 1
     fi

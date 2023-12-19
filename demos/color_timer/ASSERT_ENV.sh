@@ -19,6 +19,9 @@ ShellKit_ENV_lst+=(ShellKit_ENV_TPUT[@])
 # shellcheck disable=SC2034
 declare -a ShellKit_ENV_SLEEP=(SLEEP _sleep)
 ShellKit_ENV_lst+=(ShellKit_ENV_SLEEP[@])
+# shellcheck disable=SC2034
+declare -a ShellKit_ENV_OPENSSL=(OPENSSL false)
+ShellKit_ENV_lst+=(ShellKit_ENV_OPENSSL[@])
 
 ################################################################################
 
