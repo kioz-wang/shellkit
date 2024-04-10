@@ -71,7 +71,7 @@ fi
 
 for _file in "${_ld_ifile_y_lst[@]}" "${_ld_raw_file}" "${_ld_sign_file}"; do
     if file_access_r "${_file}"; then
-        ${RM} "${_file}"
+        ${SKRM} "${_file}"
         skechov "[${app}] remove ${_file}"
     fi
 done; unset _file

@@ -20,6 +20,7 @@ function ShellKit_assert_env() {
     local epath="${!einfo:1:1}"
     local echeck=("${!einfo:2}")
 
+    ename="SK${ename@U}"
     # echo "einfo name(${ename}) path(${epath}) check(${echeck[*]})"
     if [ -v "${ename}" ]; then
         # echo "einfo Already (${ename}=${!ename})"
@@ -64,21 +65,6 @@ ShellKit_ENV_lst+=(ShellKit_ENV_SLEEP[@])
 declare -a ShellKit_ENV_OPENSSL=(OPENSSL /usr/bin/openssl version)
 ShellKit_ENV_lst+=(ShellKit_ENV_OPENSSL[@])
 # shellcheck disable=SC2034
-declare -a ShellKit_ENV_SED=(SED /usr/bin/sed --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_SED[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_AWK=(AWK /usr/bin/awk --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_AWK[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_BASENAME=(BASENAME /usr/bin/basename --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_BASENAME[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_DIRNAME=(DIRNAME /usr/bin/dirname --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_DIRNAME[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_REALPATH=(REALPATH /usr/bin/realpath --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_REALPATH[@])
-# shellcheck disable=SC2034
 declare -a ShellKit_ENV_RM=(RM /usr/bin/rm --version)
 ShellKit_ENV_lst+=(ShellKit_ENV_RM[@])
 # shellcheck disable=SC2034
@@ -88,23 +74,11 @@ ShellKit_ENV_lst+=(ShellKit_ENV_WC[@])
 declare -a ShellKit_ENV_LS=(LS /usr/bin/ls --version)
 ShellKit_ENV_lst+=(ShellKit_ENV_LS[@])
 # shellcheck disable=SC2034
-declare -a ShellKit_ENV_PRINTF=(PRINTF /usr/bin/printf --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_PRINTF[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_HEAD=(HEAD /usr/bin/head --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_HEAD[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_TAIL=(TAIL /usr/bin/tail --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_TAIL[@])
+declare -a ShellKit_ENV_MV=(MV /usr/bin/mv --version)
+ShellKit_ENV_lst+=(ShellKit_ENV_MV[@])
 # shellcheck disable=SC2034
 declare -a ShellKit_ENV_GREP=(GREP /usr/bin/grep --version)
 ShellKit_ENV_lst+=(ShellKit_ENV_GREP[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_DD=(DD /usr/bin/dd --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_DD[@])
-# shellcheck disable=SC2034
-declare -a ShellKit_ENV_MV=(MV /usr/bin/mv --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_MV[@])
 
 ################################################################################
 
