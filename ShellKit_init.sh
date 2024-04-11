@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ShellKit_ROOT=${BASH_SOURCE[0]%/*}
-if [ "${ShellKit_ROOT}" == "${BASH_SOURCE[0]}" ]; then
+if [[ "${ShellKit_ROOT}" == "${BASH_SOURCE[0]}" ]]; then
     ShellKit_ROOT=$(pwd)
 else
     ShellKit_ROOT=$(realpath "${ShellKit_ROOT}")

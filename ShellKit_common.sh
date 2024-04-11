@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "${ShellKit_ROOT}" ]; then
+if [[ -z "${ShellKit_ROOT}" ]]; then
     echo "Not Found Env ShellKit_ROOT"
     exit 1
 fi
@@ -29,9 +29,9 @@ unset ShellKit_ret_i
 
 ################################################################################
 
-if [ -d "${ShellKit_ROOT}/common" ]; then
+if [[ -d "${ShellKit_ROOT}/common" ]]; then
     for i in "${ShellKit_ROOT}/common"/ShellKit_*.sh; do
-        if [ -r "$i" ]; then
+        if [[ -r "$i" ]]; then
             # shellcheck source=/dev/null
             source "$i"
         fi
@@ -40,8 +40,8 @@ fi
 
 ################################################################################
 
-if [ -v app ] && [ -n "${ShellKit_APPDIR}" ]; then
-    if [ -r "${ShellKit_APPDIR}/PROVIDER.sh" ]; then
+if [[ -v app ]] && [[ -n "${ShellKit_APPDIR}" ]]; then
+    if [[ -r "${ShellKit_APPDIR}/PROVIDER.sh" ]]; then
         # shellcheck source=/dev/null
         source "${ShellKit_APPDIR}/PROVIDER.sh"
     fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "${ShellKit_ROOT}" ]; then
+if [[ -z "${ShellKit_ROOT}" ]]; then
     echo "Not Found Env ShellKit_ROOT"
     exit 1
 fi
@@ -22,14 +22,14 @@ function ShellKit_assert_env() {
 
     ename="SK${ename@U}"
     # echo "einfo name(${ename}) path(${epath}) check(${echeck[*]})"
-    if [ -v "${ename}" ]; then
+    if [[ -v "${ename}" ]]; then
         # echo "einfo Already (${ename}=${!ename})"
         # shellcheck disable=SC2163
         export "${ename}"
         return
     fi
     export "${ename}"="${epath}"
-    if [ ${#echeck[@]} -eq 0 ] ; then
+    if ((${#echeck[@]} == 0)) ; then
         # echo "einfo Force (${ename}=${epath})"
         return
     fi
@@ -41,8 +41,8 @@ function ShellKit_assert_env() {
 
 ################################################################################
 
-if [ -n "${ShellKit_APPDIR}" ]; then
-    if [ -r "${ShellKit_APPDIR}/ASSERT_ENV.sh" ]; then
+if [[ -n "${ShellKit_APPDIR}" ]]; then
+    if [[ -r "${ShellKit_APPDIR}/ASSERT_ENV.sh" ]]; then
         # shellcheck source=/dev/null
         source "${ShellKit_APPDIR}/ASSERT_ENV.sh"
     fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "${ShellKit_ROOT}" ]; then
+if [[ -z "${ShellKit_ROOT}" ]]; then
     echo "Not Found Env ShellKit_ROOT"
     exit 1
 fi
@@ -37,7 +37,7 @@ function ShellKit_ccode_SGR_Reset() {
 
     CSIseq="\e[0m"
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -88,11 +88,11 @@ function ShellKit_ccode_SGR_Color() {
     shift $((OPTIND - 1)); unset OPTIND
 
     local color="default"
-    if [ $# -ge 1 ]; then
+    if (($# >= 1)); then
         color=$1
         shift
     fi
-    if [ -z "${color2int[${color}]}" ]; then
+    if [[ -z "${color2int[${color}]}" ]]; then
         echo "NotFound Color ${color} in [${!color2int[*]}]"
         return 1
     fi
@@ -105,7 +105,7 @@ function ShellKit_ccode_SGR_Color() {
     colori+=color2int[${color}]
     CSIseq="\e[${colori}m"
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -150,7 +150,7 @@ function ShellKit_ccode_SGR_Color256() {
             b)
                 b256=${OPTARG} ;;&
             r|g|b)
-                if [ "${OPTARG}" -lt 0 ] || [ "${OPTARG}" -ge 256 ]; then
+                if ((OPTARG < 0 || OPTARG >= 256)); then
                     echo "RGB value ${OPTARG} NotIn [0,255]"
                     return 1
                 fi
@@ -169,7 +169,7 @@ function ShellKit_ccode_SGR_Color256() {
     if ${foreground}; then colori+=38; else colori+=48; fi
     CSIseq="\e[${colori};2;${r256};${g256};${b256}m"
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -215,11 +215,11 @@ function ShellKit_ccode_SGR_Style() {
     shift $((OPTIND - 1)); unset OPTIND
 
     local style="bold"
-    if [ $# -ge 1 ]; then
+    if (($# >= 1)); then
         style=$1
         shift
     fi
-    if [ -z "${style2int[${style}]}" ]; then
+    if [[ -z "${style2int[${style}]}" ]]; then
         echo "NotFound style ${style} in [${!style2int[*]}]"
         return 1
     fi
@@ -234,7 +234,7 @@ function ShellKit_ccode_SGR_Style() {
     fi
     CSIseq="\e[${stylei}m"
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -280,7 +280,7 @@ function ShellKit_ccode_CSI_Move() {
     shift $((OPTIND - 1)); unset OPTIND
 
     local move="right"
-    if [ $# -ge 1 ]; then
+    if (($# >= 1)); then
         move=$1
         shift
     fi
@@ -312,7 +312,7 @@ function ShellKit_ccode_CSI_Move() {
     esac
     CSIseq="\e[${offset}${action}"
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -352,7 +352,7 @@ function ShellKit_ccode_CSI_MoveXY() {
             y)
                 movey=${OPTARG} ;;&
             x|y)
-                if [ "${OPTARG}" -le 0 ]; then
+                if ((OPTARG <= 0)); then
                     echo "the valud of ${opt} ${OPTARG} NotIn [1,+inf)"
                     return 1
                 fi
@@ -364,22 +364,22 @@ function ShellKit_ccode_CSI_MoveXY() {
         esac
     done; unset opt
     shift $((OPTIND - 1)); unset OPTIND
-    if [ ${movex} -eq 0 ] && [ ${movey} -eq 0 ]; then
+    if ((movex == 0 && movey == 0)); then
         echo "at least one of -x and -y must appear"
         return 1
     fi
 
     local CSIseq
 
-    if [ ${movex} -eq 0 ]; then
+    if ((movex == 0)); then
         CSIseq="\e[${movey}d"
-    elif [ ${movey} -eq 0 ]; then
+    elif ((movey == 0)); then
         CSIseq="\e[${movex}G"
     else
         CSIseq="\e[${movey};${movex}H"
     fi
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -418,7 +418,7 @@ function ShellKit_ccode_CSI_MoveSaveRest() {
     shift $((OPTIND - 1)); unset OPTIND
 
     local action="save"
-    if [ $# -ge 1 ]; then
+    if (($# >= 1)); then
         action=$1
         shift
     fi
@@ -434,7 +434,7 @@ function ShellKit_ccode_CSI_MoveSaveRest() {
         return 1
     fi
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -479,7 +479,7 @@ function ShellKit_ccode_CSI_Erase() {
                 object="character" ;;
             n)
                 number=${OPTARG}
-                if [ "${OPTARG}" -le 0 ]; then
+                if ((OPTARG <= 0)); then
                     echo "the valud of ${opt} ${OPTARG} NotIn [1,+inf)"
                     return 1
                 fi
@@ -500,17 +500,17 @@ function ShellKit_ccode_CSI_Erase() {
         CSIseq="\e[${number}X"
     else
         local range="end"
-        if [ $# -ge 1 ]; then
+        if (($# >= 1)); then
             range=$1
             shift
         fi
-        if [ -z "${rangedisp2int[${range}]}" ]; then
+        if [[ -z "${rangedisp2int[${range}]}" ]]; then
             echo "NotFound range ${range} in [${!rangedisp2int[*]}]"
             return 1
         fi
         rangei=rangedisp2int[${range}]
         if [ ${object} == "line" ]; then
-            if [ ${rangei} -eq 3 ]; then
+            if ((rangei == 3)); then
                 echo "Invalid range ${range} when object is ${object}"
                 return 1
             fi
@@ -518,14 +518,14 @@ function ShellKit_ccode_CSI_Erase() {
         else
             action="J"
         fi
-        if [ ${rangei} -eq 0 ]; then
+        if ((rangei == 0)); then
             CSIseq="\e[${action}"
         else
             CSIseq="\e[${rangei}${action}"
         fi
     fi
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -564,7 +564,7 @@ function ShellKit_ccode_CSI_InsDel() {
                 object="blanks" ;;
             n)
                 number=${OPTARG}
-                if [ "${OPTARG}" -le 0 ]; then
+                if ((OPTARG <= 0)); then
                     echo "the valud of ${opt} ${OPTARG} NotIn [1,+inf)"
                     return 1
                 fi
@@ -591,7 +591,7 @@ function ShellKit_ccode_CSI_InsDel() {
     fi
     CSIseq="\e[${number}${action}"
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then
@@ -631,11 +631,11 @@ function ShellKit_ccode_ESConly() {
     shift $((OPTIND - 1)); unset OPTIND
 
     local item="ris"
-    if [ $# -ge 1 ]; then
+    if (($# >= 1)); then
         item=$1
         shift
     fi
-    if [ -z "${name2char[${item}]}" ]; then
+    if [[ -z "${name2char[${item}]}" ]]; then
         echo "NotFound ${item} in [${!name2char[*]}]"
         return 1
     fi
@@ -644,7 +644,7 @@ function ShellKit_ccode_ESConly() {
 
     ESCseq="\e${name2char[${item}]}"
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${ESCseq}$*"
     else
         if ${escape}; then
@@ -667,7 +667,7 @@ declare -frx ShellKit_ccode_ESConly
 #   use `tput lines/cols` to get the number of rows/columns for the current terminal
 #######################################
 function ShellKit_ccode_CSI_CPR() {
-    if [ $# -lt 2 ]; then
+    if (($# < 2)); then
         echo "Tell me two variables' name for coordinate"
         return 1
     fi
@@ -715,11 +715,11 @@ function ShellKit_ccode_CSI_PriMode() {
     shift $((OPTIND - 1)); unset OPTIND
 
     local mode="scnm"
-    if [ $# -ge 1 ]; then
+    if (($# >= 1)); then
         mode=$1
         shift
     fi
-    if [ -z "${mode2int[${mode}]}" ]; then
+    if [[ -z "${mode2int[${mode}]}" ]]; then
         echo "NotFound mode ${mode} in [${!mode2int[*]}]"
         return 1
     fi
@@ -734,7 +734,7 @@ function ShellKit_ccode_CSI_PriMode() {
         CSIseq="\e[?${modei}h"
     fi
 
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         echo -ne "${CSIseq}$*"
     else
         if ${escape}; then

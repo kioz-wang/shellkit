@@ -15,7 +15,7 @@ SHELLKIT_LOG_TIMESTAMP=normal
 assert_params_num_min "${app}" "{ifile} [{odir}]" 1 $#
 
 declare -r ifile=$1
-if [ $# -ge 2 ]; then
+if (($# >= 2)); then
     declare -r odir=$2
 else
     declare -r odir=${PWD}
@@ -37,12 +37,12 @@ declare -a _ld_ifile_y_lst
 
 declare -i ifile_num
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     secure_asn1packer_split_signature "${ifile}" "${_ld_raw_file}" "${_ld_sign_file}"
     skechov "[${app}] split ${ifile} to ${_ld_raw_file}($(file_get_size "${_ld_raw_file}")) and ${_ld_sign_file}($(file_get_size "${_ld_sign_file}"))"
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     if secure_asn1packer_verify "${_ld_raw_file}" "${_ld_sign_file}"; then
         skechov "[${app}] verify the signature(${_ld_sign_file}) of ${_ld_raw_file}"
     else
@@ -51,7 +51,7 @@ if [ ${ret} -eq 0 ]; then
     fi
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     if "${ShellKit_ROOT}/apps/asn1packer/ShellKit_asn1unpack.sh" "${_ld_raw_file}" "${odir}"; then
         skechov "[${app}] asn1unpack ${_ld_raw_file}"
     else
@@ -60,7 +60,7 @@ if [ ${ret} -eq 0 ]; then
     fi
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     ifile_num=$(${SKCAT} "${odir}/ifile_num")
     for (( i=0; i < ifile_num; i++ )); do
         ${SKMV} "${odir}/ifile$i" "${odir}/ifile${i}.y"
@@ -69,7 +69,7 @@ if [ ${ret} -eq 0 ]; then
     done; unset i
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     for ifile_y in "${_ld_ifile_y_lst[@]}"; do
         if secure_asn1packer_decrypt "${ifile_y}" "${ifile_y%.y}"; then
             skechov "[${app}] decrypt ${ifile_y} to ${ifile_y%.y}"

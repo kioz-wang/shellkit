@@ -134,7 +134,7 @@ function main() {
 
     declare -r isec=$1
     shift
-    if [ $# -ne 0 ]; then
+    if (($# != 0)); then
         declare -r imsg="$*"
     else
         declare -r imsg="Alert!"

@@ -17,12 +17,12 @@ declare -r _gd_parse_file=${ShellKit_TEMP}/parse.asn1
 assert_params_num_min "${app}" "{ifile} [{odir} [{idx}]]" 1 $#
 
 declare -r ifile=$1
-if [ $# -ge 2 ]; then
+if (($# >= 2)); then
     declare -r odir=$2
 else
     declare -r odir=${PWD}
 fi
-if [ $# -ge 3 ]; then
+if (($# >= 3)); then
     declare -ir idx=$3
 fi
 
@@ -32,7 +32,7 @@ assert_dirs_w "${odir}"
 skechod "[${app}] params:"
 skechod "[${app}]     ifile  = ${ifile}"
 skechod "[${app}]     odir   = ${odir}"
-if [ -v idx ]; then
+if [[ -v idx ]]; then
     skechod "[${app}]     idx    = ${idx}"
 else
     skechod "[${app}]     idx    = ALL"
@@ -72,10 +72,10 @@ function parse_dump_by_idx() {
         shopt -s extglob
     fi
     check_hash=${check_hash##*(00)}
-    if [ ${flag_extglob} -eq 0 ]; then
+    if ((flag_extglob == 0)); then
         shopt -u extglob
     fi
-    if [ "${check_hash}" = "${parse_result_hash}" ]; then
+    if [ "${check_hash}" == "${parse_result_hash}" ]; then
         skechod "[${app}] [parse]:${parse_idx} integrity check pass"
     else
         skechoe "[${app}] [parse]:${parse_idx} integrity fail with ${check_hash}"
@@ -84,7 +84,7 @@ function parse_dump_by_idx() {
     fi
 }
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     if ${SKOPENSSL} asn1parse -inform der -in "${ifile}" > "${_gd_parse_file}"; then
         skechov "[${app}] generate asn1 formatter: ${_gd_parse_file}"
     else
@@ -93,25 +93,25 @@ if [ ${ret} -eq 0 ]; then
     fi
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     ifile_num=$(${SKGREP} -c "prim: IA5STRING[ ]*:ifile" "${_gd_parse_file}")
     ${SKECHO} -n ${ifile_num} > "${odir}/ifile_num"
     # shellcheck disable=SC2086
-    if [ -v idx ] && [ ${idx} -ge ${ifile_num} ]; then
+    if [[ -v idx ]] && ((idx >= ifile_num)); then
         skechoe "[${app}] out of index ${idx}, total ${ifile_num}"
         ret=${SHELLKIT_RET_OUTOFRANGE}
     fi
 fi
 
-if [ ${ret} -eq 0 ]; then
-    if [ -v idx ]; then
+if ((ret == 0)); then
+    if [[ -v idx ]]; then
         parse_dump_by_idx "${idx}"
         ret=$?
     else
         for (( i=0; i < ifile_num; i++ )); do
             parse_dump_by_idx $i
             ret=$?
-            [ ${ret} -ne 0 ] && break
+            ((ret != 0)) && break
         done; unset i
     fi
 fi

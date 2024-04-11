@@ -285,7 +285,7 @@ einfo name(SKGREP) path(/usr/bin/grep) check(--version)
 **[P.rarg.0]** *命令行参数数量检查*
 
 ```bash
-if [ $# -lt 2 ]; then
+if (($# < 2)); then
     echo "Tell me two variables' name for coordinate"
     return 1
 fi
@@ -309,7 +309,7 @@ assert_files_r "${ifile_lst[@]}"
 ```
 
 ```bash
-if [ -z "${mode2int[${mode}]}" ]; then
+if [[ -z "${mode2int[${mode}]}" ]]; then
     echo "NotFound mode ${mode} in [${!mode2int[*]}]"
     return 1
 fi
@@ -340,7 +340,7 @@ while getopts ":er:g:b:" opt; do
         b)
             b256=${OPTARG} ;;&
         r|g|b)
-            if [ "${OPTARG}" -lt 0 ] || [ "${OPTARG}" -ge 256 ]; then
+            if ((OPTARG < 0 || OPTARG >= 256)); then
                 echo "RGB value ${OPTARG} NotIn [0,255]"
                 return 1
             fi

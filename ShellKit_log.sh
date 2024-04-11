@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "${ShellKit_ROOT}" ]; then
+if [[ -z "${ShellKit_ROOT}" ]]; then
     echo "Not Found Env ShellKit_ROOT"
     exit 1
 fi
@@ -41,9 +41,9 @@ declare -frx sktimestamp
 
 ################################################################################
 
-if [ -d "${ShellKit_ROOT}/log" ]; then
+if [[ -d "${ShellKit_ROOT}/log" ]]; then
     for i in "${ShellKit_ROOT}/log"/ShellKit_*.sh; do
-        if [ -r "$i" ]; then
+        if [[ -r "$i" ]]; then
             # shellcheck source=/dev/null
             source "$i"
         fi

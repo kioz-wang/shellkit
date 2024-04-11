@@ -37,7 +37,7 @@ for (( i=0; i < ifile_num; i++ )); do
     _ld_ifile_y_lst[i]="${ifile_lst[i]}.y"
 done; unset i
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     for (( i = 0; i < ifile_num && ret == 0; i++ )); do
         if secure_asn1packer_encrypt "${ifile_lst[i]}" "${_ld_ifile_y_lst[i]}"; then
             skechov "[${app}] encrypt ${ifile_lst[i]} to ${_ld_ifile_y_lst[i]}"
@@ -48,7 +48,7 @@ if [ ${ret} -eq 0 ]; then
     done; unset i
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     if "${ShellKit_ROOT}/apps/asn1packer/ShellKit_asn1pack.sh" "${_ld_ifile_y_lst[@]}" "${_ld_raw_file}"; then
         skechov "[${app}] asn1pack ${_ld_raw_file}"
     else
@@ -57,7 +57,7 @@ if [ ${ret} -eq 0 ]; then
     fi
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     if secure_asn1packer_sign "${_ld_raw_file}" "${_ld_sign_file}"; then
         skechov "[${app}] generate the signature(${_ld_sign_file}) of ${_ld_raw_file}"
     else
@@ -66,7 +66,7 @@ if [ ${ret} -eq 0 ]; then
     fi
 fi
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     secure_asn1packer_join_signature "${_ld_raw_file}" "${_ld_sign_file}" "${ofile}"
     skechov "[${app}] generate ${ofile} from ${ifile_lst[*]}"
 fi

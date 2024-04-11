@@ -58,7 +58,7 @@ skechod "[${app}] write asn1 formatter ifiles-part into ${_gd_conf_file}"
 
 skechov "[${app}] generate asn1 formatter: ${_gd_conf_file}"
 
-if [ ${ret} -eq 0 ]; then
+if ((ret == 0)); then
     if ${SKOPENSSL} asn1parse -genconf "${_gd_conf_file}" -out "${ofile}" -noout; then
         skechov "[${app}] generate ${ofile} packed ${ifile_lst[*]}"
     else
