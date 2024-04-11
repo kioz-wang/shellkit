@@ -79,6 +79,9 @@ ShellKit_ENV_lst+=(ShellKit_ENV_MV[@])
 # shellcheck disable=SC2034
 declare -a ShellKit_ENV_GREP=(GREP /usr/bin/grep --version)
 ShellKit_ENV_lst+=(ShellKit_ENV_GREP[@])
+# shellcheck disable=SC2034
+declare -a ShellKit_ENV_DATE=(DATE /usr/bin/date --version)
+ShellKit_ENV_lst+=(ShellKit_ENV_DATE[@])
 
 ################################################################################
 

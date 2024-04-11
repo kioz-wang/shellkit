@@ -9,6 +9,12 @@ source "${ShellKit_ROOT:-"${ShellKit_APPDIR}/../.."}/ShellKit_init.sh" || exit 1
 SHELLKIT_LOG_VERB_ENABLE=true
 # shellcheck disable=SC2034
 SHELLKIT_LOG_DEBUG_ENABLE=true
+# shellcheck disable=SC2034
+SHELLKIT_LOG_TIMESTAMP_PREFIX='<'
+# shellcheck disable=SC2034
+SHELLKIT_LOG_TIMESTAMP_SUFFIX='>'
+# shellcheck disable=SC2034
+SHELLKIT_LOG_TIMESTAMP=extend
 
 assert_dirs_w "${ShellKit_APPDIR}/TEST/"
 cd "${ShellKit_APPDIR}/TEST/" || exit 1

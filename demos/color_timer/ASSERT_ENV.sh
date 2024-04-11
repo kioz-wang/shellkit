@@ -11,9 +11,6 @@ function _sleep() {
 declare -a ShellKit_ENV_lst=()
 
 # shellcheck disable=SC2034
-declare -a ShellKit_ENV_DATE=(DATE /usr/bin/date --version)
-ShellKit_ENV_lst+=(ShellKit_ENV_DATE[@])
-# shellcheck disable=SC2034
 declare -a ShellKit_ENV_TPUT=(TPUT /usr/bin/tput -V)
 ShellKit_ENV_lst+=(ShellKit_ENV_TPUT[@])
 # shellcheck disable=SC2034

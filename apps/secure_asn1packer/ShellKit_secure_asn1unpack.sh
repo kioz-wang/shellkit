@@ -9,6 +9,8 @@ source "${ShellKit_ROOT:-"${ShellKit_APPDIR}/../.."}/ShellKit_init.sh" || exit 1
 SHELLKIT_LOG_VERB_ENABLE=true
 # shellcheck disable=SC2034
 SHELLKIT_LOG_DEBUG_ENABLE=true
+# shellcheck disable=SC2034
+SHELLKIT_LOG_TIMESTAMP=normal
 
 assert_params_num_min "${app}" "{ifile} [{odir}]" 1 $#
 

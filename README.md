@@ -74,7 +74,7 @@ date +v%y.%-m.%-d
 
 ### log
 
-`ShellKit_log.sh` 中配置了默认的日志等级使能。
+`ShellKit_log.sh` 中配置了默认的日志等级使能以及默认的时间戳配置。
 
 `log/` 下给出了该模块的多种实现：
 

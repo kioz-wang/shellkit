@@ -9,6 +9,8 @@ source "${ShellKit_ROOT:-"${ShellKit_APPDIR}/../.."}/ShellKit_init.sh" || exit 1
 SHELLKIT_LOG_VERB_ENABLE=true
 # shellcheck disable=SC2034
 SHELLKIT_LOG_DEBUG_ENABLE=true
+# shellcheck disable=SC2034
+SHELLKIT_LOG_TIMESTAMP=normal
 
 declare -r _gd_parse_file=${ShellKit_TEMP}/parse.asn1
 
