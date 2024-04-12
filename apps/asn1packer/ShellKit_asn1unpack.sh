@@ -29,13 +29,13 @@ fi
 assert_files_r "${ifile}"
 assert_dirs_w "${odir}"
 
-skechod "[${app}] params:"
-skechod "[${app}]     ifile  = ${ifile}"
-skechod "[${app}]     odir   = ${odir}"
+skechod "params:"
+skechod "    ifile  = ${ifile}"
+skechod "    odir   = ${odir}"
 if [[ -v idx ]]; then
-    skechod "[${app}]     idx    = ${idx}"
+    skechod "    idx    = ${idx}"
 else
-    skechod "[${app}]     idx    = ALL"
+    skechod "    idx    = ALL"
 fi
 skechod
 
@@ -53,17 +53,17 @@ function parse_dump_by_idx() {
 
     parse_result_length=$(${SKGREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SKSED} -n 2p)
     parse_result_length=0x${parse_result_length##*:}
-    skechod "[${app}] [parse]:${parse_idx} length ${parse_result_length}"
+    skechod "[parse]:${parse_idx} length ${parse_result_length}"
 
     parse_result_hash=$(${SKGREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SKSED} -n 3p)
     parse_result_hash=${parse_result_hash##*:}
     ${SKECHO} -n "${parse_result_hash}" > "${odir}/ifile${parse_idx}.hash"
-    skechov "[${app}] [parse]:${parse_idx} hash ${parse_result_hash} -> ${odir}/ifile${parse_idx}.hash"
+    skechov "[parse]:${parse_idx} hash ${parse_result_hash} -> ${odir}/ifile${parse_idx}.hash"
 
     ${SKGREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SKSED} -n 4p \
         | ${SKSED} 's/^.*OCTET STRING[ ]*://g'    \
         | file_base64 d > "${odir}/ifile${parse_idx}"
-    skechov "[${app}] [parse]:${parse_idx} context -> ${odir}/ifile${parse_idx}"
+    skechov "[parse]:${parse_idx} context -> ${odir}/ifile${parse_idx}"
 
     check_hash=$(file_get_hash "${odir}/ifile${parse_idx}" sha256 | ${SKSED} 's/[a-z]/\u&/g')
     if shopt -q extglob; then
@@ -76,9 +76,9 @@ function parse_dump_by_idx() {
         shopt -u extglob
     fi
     if [ "${check_hash}" == "${parse_result_hash}" ]; then
-        skechod "[${app}] [parse]:${parse_idx} integrity check pass"
+        skechod "[parse]:${parse_idx} integrity check pass"
     else
-        skechoe "[${app}] [parse]:${parse_idx} integrity fail with ${check_hash}"
+        skechoe "[parse]:${parse_idx} integrity fail with ${check_hash}"
         # shellcheck disable=SC2086
         return ${SHELLKIT_RET_CYBER_INTEGR}
     fi
@@ -86,9 +86,9 @@ function parse_dump_by_idx() {
 
 if ((ret == 0)); then
     if ${SKOPENSSL} asn1parse -inform der -in "${ifile}" > "${_gd_parse_file}"; then
-        skechov "[${app}] generate asn1 formatter: ${_gd_parse_file}"
+        skechov "generate asn1 formatter: ${_gd_parse_file}"
     else
-        skechov "[${app}] fail to generate asn1 formatter: ${_gd_parse_file} ($?)"
+        skechov "fail to generate asn1 formatter: ${_gd_parse_file} ($?)"
         ret=${SHELLKIT_RET_ASN1}
     fi
 fi
@@ -98,7 +98,7 @@ if ((ret == 0)); then
     ${SKECHO} -n ${ifile_num} > "${odir}/ifile_num"
     # shellcheck disable=SC2086
     if [[ -v idx ]] && ((idx >= ifile_num)); then
-        skechoe "[${app}] out of index ${idx}, total ${ifile_num}"
+        skechoe "out of index ${idx}, total ${ifile_num}"
         ret=${SHELLKIT_RET_OUTOFRANGE}
     fi
 fi
@@ -118,7 +118,7 @@ fi
 
 if file_access_r "${_gd_parse_file}"; then
     ${SKRM} "${_gd_parse_file}"
-    skechov "[${app}] remove asn1 formatter: ${_gd_parse_file}"
+    skechov "remove asn1 formatter: ${_gd_parse_file}"
 fi
 
 exit ${ret}

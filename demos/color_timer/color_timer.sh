@@ -140,9 +140,9 @@ function main() {
         declare -r imsg="Alert!"
     fi
 
-    skechod "[${app}] params:"
-    skechod "[${app}]     isec  = ${isec}"
-    skechod "[${app}]     imsg  = ${imsg}"
+    skechod "params:"
+    skechod "    isec  = ${isec}"
+    skechod "    imsg  = ${imsg}"
     skechod
 
     local -i ret=${SHELLKIT_RET_SUCCESS}

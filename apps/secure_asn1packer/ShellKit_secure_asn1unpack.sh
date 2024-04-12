@@ -24,9 +24,9 @@ fi
 assert_files_r "${ifile}"
 assert_dirs_w "${odir}"
 
-skechod "[${app}] params:"
-skechod "[${app}]     ifile  = ${ifile}"
-skechod "[${app}]     odir   = ${odir}"
+skechod "params:"
+skechod "    ifile  = ${ifile}"
+skechod "    odir   = ${odir}"
 skechod
 
 declare -i ret=${SHELLKIT_RET_SUCCESS}
@@ -39,23 +39,23 @@ declare -i ifile_num
 
 if ((ret == 0)); then
     secure_asn1packer_split_signature "${ifile}" "${_ld_raw_file}" "${_ld_sign_file}"
-    skechov "[${app}] split ${ifile} to ${_ld_raw_file}($(file_get_size "${_ld_raw_file}")) and ${_ld_sign_file}($(file_get_size "${_ld_sign_file}"))"
+    skechov "split ${ifile} to ${_ld_raw_file}($(file_get_size "${_ld_raw_file}")) and ${_ld_sign_file}($(file_get_size "${_ld_sign_file}"))"
 fi
 
 if ((ret == 0)); then
     if secure_asn1packer_verify "${_ld_raw_file}" "${_ld_sign_file}"; then
-        skechov "[${app}] verify the signature(${_ld_sign_file}) of ${_ld_raw_file}"
+        skechov "verify the signature(${_ld_sign_file}) of ${_ld_raw_file}"
     else
-        skechoe "[${app}] fail to verify the signature(${_ld_sign_file}) of ${_ld_raw_file} ($?)"
+        skechoe "fail to verify the signature(${_ld_sign_file}) of ${_ld_raw_file} ($?)"
         ret=${SHELLKIT_RET_CYBER_AUTHEN}
     fi
 fi
 
 if ((ret == 0)); then
     if "${ShellKit_ROOT}/apps/asn1packer/ShellKit_asn1unpack.sh" "${_ld_raw_file}" "${odir}"; then
-        skechov "[${app}] asn1unpack ${_ld_raw_file}"
+        skechov "asn1unpack ${_ld_raw_file}"
     else
-        skechoe "[${app}] fail to asn1unpack ${_ld_raw_file} ($?)"
+        skechoe "fail to asn1unpack ${_ld_raw_file} ($?)"
         ret=${SHELLKIT_RET_SUBPROCESS}
     fi
 fi
@@ -72,9 +72,9 @@ fi
 if ((ret == 0)); then
     for ifile_y in "${_ld_ifile_y_lst[@]}"; do
         if secure_asn1packer_decrypt "${ifile_y}" "${ifile_y%.y}"; then
-            skechov "[${app}] decrypt ${ifile_y} to ${ifile_y%.y}"
+            skechov "decrypt ${ifile_y} to ${ifile_y%.y}"
         else
-            skechoe "[${app}] fail to decrypt ${ifile_y} to ${ifile_y%.y} ($?)"
+            skechoe "fail to decrypt ${ifile_y} to ${ifile_y%.y} ($?)"
             ret=${SHELLKIT_RET_CYBER_CRYPTO}
         fi
     done; unset ifile_y
@@ -83,7 +83,7 @@ fi
 for _file in "${_ld_ifile_y_lst[@]}" "${_ld_raw_file}" "${_ld_sign_file}"; do
     if file_access_r "${_file}"; then
         ${SKRM} "${_file}"
-        skechov "[${app}] remove ${_file}"
+        skechov "remove ${_file}"
     fi
 done; unset _file
 

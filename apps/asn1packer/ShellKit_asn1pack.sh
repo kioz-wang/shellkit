@@ -23,11 +23,11 @@ unset "ifile_lst[-1]"
 
 assert_files_r "${ifile_lst[@]}"
 
-skechod "[${app}] params:"
+skechod "params:"
 for (( i=0; i < ifile_num; i++ )); do
-    skechod "[${app}]     ifile[$i] = ${ifile_lst[i]}"
+    skechod "    ifile[$i] = ${ifile_lst[i]}"
 done; unset i
-skechod "[${app}]     ofile    = ${ofile}"
+skechod "    ofile    = ${ofile}"
 skechod
 
 declare -i ret=${SHELLKIT_RET_SUCCESS}
@@ -37,12 +37,12 @@ asn1=SEQ:ofile
 
 [ofile]
 EOF
-skechod "[${app}] write asn1 formatter head-part into ${_gd_conf_file}"
+skechod "write asn1 formatter head-part into ${_gd_conf_file}"
 
 for (( i=0; i < ifile_num; i++ )); do
     ${SKECHO} "ifile$i = SEQ:ifile$i" >> "${_gd_conf_file}"
 done; unset i
-skechod "[${app}] write asn1 formatter ofile-part into ${_gd_conf_file}"
+skechod "write asn1 formatter ofile-part into ${_gd_conf_file}"
 
 for (( i=0; i < ifile_num; i++ )); do
     ${SKCAT} >> "${_gd_conf_file}" <<EOF
@@ -54,22 +54,22 @@ hash    = INT:0x$(file_get_hash "${ifile_lst[i]}" sha256)
 content = OCT:$(file_base64 e "${ifile_lst[i]}")
 EOF
 done; unset i
-skechod "[${app}] write asn1 formatter ifiles-part into ${_gd_conf_file}"
+skechod "write asn1 formatter ifiles-part into ${_gd_conf_file}"
 
-skechov "[${app}] generate asn1 formatter: ${_gd_conf_file}"
+skechov "generate asn1 formatter: ${_gd_conf_file}"
 
 if ((ret == 0)); then
     if ${SKOPENSSL} asn1parse -genconf "${_gd_conf_file}" -out "${ofile}" -noout; then
-        skechov "[${app}] generate ${ofile} packed ${ifile_lst[*]}"
+        skechov "generate ${ofile} packed ${ifile_lst[*]}"
     else
-        skechov "[${app}] fail to generate ${ofile} packed ${ifile_lst[*]} ($?)"
+        skechov "fail to generate ${ofile} packed ${ifile_lst[*]} ($?)"
         ret=${SHELLKIT_RET_ASN1}
     fi
 fi
 
 if file_access_r "${_gd_conf_file}"; then
     ${SKRM} "${_gd_conf_file}"
-    skechov "[${app}] remove asn1 formatter: ${_gd_conf_file}"
+    skechov "remove asn1 formatter: ${_gd_conf_file}"
 fi
 
 exit ${ret}

@@ -390,11 +390,11 @@ source "${ShellKit_ROOT:-"${ShellKit_APPDIR}/../.."}/ShellKit_init.sh" || exit 1
 **[P.rapp.5]** dump 命令行参数
 
 ```bash
-skechod "[${app}] params:"
+skechod "params:"
 for (( i=0; i < ifile_num; i++ )); do
-    skechod "[${app}]     ifile[$i] = ${ifile_lst[i]}"
+    skechod "    ifile[$i] = ${ifile_lst[i]}"
 done; unset i
-skechod "[${app}]     ofile    = ${ofile}"
+skechod "    ofile    = ${ofile}"
 skechod
 ```
 
@@ -467,7 +467,7 @@ return ${ret}
 **[P.tgen.0]** *定义 tgen 名*
 
 ```bash
-declare -r tgen="tgen(app_name)"
+declare -r app="tgen(name)"
 ```
 
 **[P.tgen.1]** *初始化应用运行时*
@@ -486,7 +486,7 @@ cd "${BASH_SOURCE[0]%/*}/TEST/" || exit 1
 **[P.tcase.0]** *定义 tcase 名*
 
 ```bash
-declare -r tcase="tcase(app_name)"
+declare -r app="tcase(name)"
 ```
 
 **[P.tcase.1]** *初始化应用运行时*

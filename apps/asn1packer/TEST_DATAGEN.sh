@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-declare -r tgen="tgen(asn1packer)"
+# shellcheck disable=SC2034
+declare -r app="tgen(asn1packer)"
 
 ShellKit_APPDIR="${BASH_SOURCE[0]%/*}"
 # shellcheck source=../../ShellKit_init.sh
@@ -16,9 +17,9 @@ cd "${ShellKit_APPDIR}/TEST/" || exit 1
 for (( i=0; i<10; i++ )); do
     bin_sz=0x$(${SKOPENSSL} rand -hex 3)
     ${SKOPENSSL} rand -out bin$i $((bin_sz))
-    skechoi "[${tgen}] generate random binary: bin$i with size ${bin_sz}"
+    skechoi "generate random binary: bin$i with size ${bin_sz}"
 done; unset i
 
 bin_sz=0x$(${SKOPENSSL} rand -hex 3)
 ${SKOPENSSL} rand -out "bin name include spaces" $((bin_sz))
-skechoi "[${tgen}] generate random binary: \"bin name include spaces\" with size ${bin_sz}"
+skechoi "generate random binary: \"bin name include spaces\" with size ${bin_sz}"

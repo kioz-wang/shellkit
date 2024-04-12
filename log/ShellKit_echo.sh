@@ -14,35 +14,35 @@ declare -rx SHELLKIT_STYLE_RESET=$(ShellKit_ccode_SGR_Reset)
 
 function skechoi() {
     if ${SHELLKIT_LOG_INFO_ENABLE}; then
-        echo -e "${SHELLKIT_STYLE_ECHOI}$(sktimestamp)[I] $*${SHELLKIT_STYLE_RESET}"
+        echo -e "${SHELLKIT_STYLE_ECHOI}$(sktimestamp)[I]${app:+[${app}]} $*${SHELLKIT_STYLE_RESET}"
     fi
 }
 declare -frx skechoi
 
 function skechov() {
     if ${SHELLKIT_LOG_VERB_ENABLE}; then
-        echo -e "${SHELLKIT_STYLE_ECHOV}$(sktimestamp)[V] $*${SHELLKIT_STYLE_RESET}"
+        echo -e "${SHELLKIT_STYLE_ECHOV}$(sktimestamp)[V]${app:+[${app}]} $*${SHELLKIT_STYLE_RESET}"
     fi
 }
 declare -frx skechov
 
 function skechow() {
     if ${SHELLKIT_LOG_WARN_ENABLE}; then
-        echo -e "${SHELLKIT_STYLE_ECHOW}$(sktimestamp)$(ShellKit_ccode_SGR_Style blink)[W]$(ShellKit_ccode_SGR_Style -x blink) $*${SHELLKIT_STYLE_RESET}"
+        echo -e "${SHELLKIT_STYLE_ECHOW}$(sktimestamp)$(ShellKit_ccode_SGR_Style blink)[W]$(ShellKit_ccode_SGR_Style -x blink)${app:+[${app}]} $*${SHELLKIT_STYLE_RESET}"
     fi
 }
 declare -frx skechow
 
 function skechoe() {
     if ${SHELLKIT_LOG_ERROR_ENABLE}; then
-        echo -e "${SHELLKIT_STYLE_ECHOE}$(sktimestamp)$(ShellKit_ccode_SGR_Style blink)[E]$(ShellKit_ccode_SGR_Style -x blink) $*${SHELLKIT_STYLE_RESET}"
+        echo -e "${SHELLKIT_STYLE_ECHOE}$(sktimestamp)$(ShellKit_ccode_SGR_Style blink)[E]$(ShellKit_ccode_SGR_Style -x blink)${app:+[${app}]} $*${SHELLKIT_STYLE_RESET}"
     fi
 }
 declare -frx skechoe
 
 function skechod() {
     if ${SHELLKIT_LOG_DEBUG_ENABLE}; then
-        echo -e "${SHELLKIT_STYLE_ECHOD}$(sktimestamp)[D] $*${SHELLKIT_STYLE_RESET}"
+        echo -e "${SHELLKIT_STYLE_ECHOD}$(sktimestamp)[D]${app:+[${app}]} $*${SHELLKIT_STYLE_RESET}"
     fi
 }
 declare -frx skechod
