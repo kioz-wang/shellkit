@@ -276,6 +276,13 @@ einfo name(SKGREP) path(/usr/bin/grep) check(--version)
 | dir_access_r  | 目录是否可读      |
 | dir_access_w  | 目录是否可写      |
 
+#### ShellKit_misc
+
+| API | 作用 |
+| --- | --- |
+| ShellKit_get_random   | 获取一个随机数        |
+| ShellKit_wait_for     | 支持失败重试的命令执行    |
+
 ## 编码规范（CodeSpec）
 
 ### 流程规范（Process）
@@ -329,7 +336,7 @@ local -i b256=0
 **[P.carg.1]** *while getopts*
 
 ```bash
-while getopts ":er:g:b:" opt; do
+unset OPTIND; while getopts ":er:g:b:" opt; do
     case ${opt} in
         e)
             escape=true ;;
@@ -350,8 +357,8 @@ while getopts ":er:g:b:" opt; do
             return 1
             ;;
     esac
-done; unset opt
-shift $((OPTIND - 1)); unset OPTIND
+done; unset opt; shift $((OPTIND - 1))
+typeset -r r256 g256 b256
 ```
 
 #### raw app

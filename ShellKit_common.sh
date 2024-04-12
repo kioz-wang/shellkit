@@ -9,6 +9,7 @@ fi
 
 declare -irx SHELLKIT_RET_SUCCESS=0
 declare -i ShellKit_ret_i=0
+declare -irx SHELLKIT_RET_BE_CAREFUL=$((++ShellKit_ret_i))
 declare -irx SHELLKIT_RET_UNSUPPORT=$((++ShellKit_ret_i))
 declare -irx SHELLKIT_RET_INVPARAM=$((++ShellKit_ret_i))
 declare -irx SHELLKIT_RET_NOTFOUND=$((++ShellKit_ret_i))
@@ -23,8 +24,8 @@ declare -irx SHELLKIT_RET_CYBER_AUTHEN=$((++ShellKit_ret_i))
 declare -irx SHELLKIT_RET_CYBER_INTEGR=$((++ShellKit_ret_i))
 declare -irx SHELLKIT_RET_CYBER_NON_RE=$((++ShellKit_ret_i))
 declare -irx SHELLKIT_RET_ASN1=$((++ShellKit_ret_i))
+declare -irx SHELLKIT_RET_TIMEOUT=$((++ShellKit_ret_i))
 declare -irx SHELLKIT_RET_MISC=$((++ShellKit_ret_i))
-declare -irx SHELLKIT_RET_BE_CAREFUL=$((++ShellKit_ret_i))
 unset ShellKit_ret_i
 
 ################################################################################

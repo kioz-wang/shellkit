@@ -21,7 +21,7 @@ fi
 #######################################
 function ShellKit_ccode_SGR_Reset() {
     local escape=false
-    while getopts ":e" opt; do
+    unset OPTIND; while getopts ":e" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -31,7 +31,7 @@ function ShellKit_ccode_SGR_Reset() {
                 ;;
         esac
     done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    shift $((OPTIND - 1))
 
     local CSIseq
 
@@ -71,7 +71,7 @@ function ShellKit_ccode_SGR_Color() {
     local foreground=false
     local bright=false
     local escape=false
-    while getopts ":fbe" opt; do
+    unset OPTIND; while getopts ":fbe" opt; do
         case ${opt} in
             f)
                 foreground=true ;;
@@ -84,8 +84,7 @@ function ShellKit_ccode_SGR_Color() {
                 return 1
                 ;;
         esac
-    done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    done; unset opt; shift $((OPTIND - 1))
 
     local color="default"
     if (($# >= 1)); then
@@ -137,7 +136,7 @@ function ShellKit_ccode_SGR_Color256() {
     local -i r256=0
     local -i g256=0
     local -i b256=0
-    while getopts ":fer:g:b:" opt; do
+    unset OPTIND; while getopts ":fer:g:b:" opt; do
         case ${opt} in
             f)
                 foreground=true ;;
@@ -160,8 +159,8 @@ function ShellKit_ccode_SGR_Color256() {
                 return 1
                 ;;
         esac
-    done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    done; unset opt; shift $((OPTIND - 1))
+    typeset -r r256 g256 b256
 
     local -i colori=0
     local CSIseq
@@ -200,7 +199,7 @@ function ShellKit_ccode_SGR_Style() {
 
     local escape=false
     local setoff=false
-    while getopts ":ex" opt; do
+    unset OPTIND; while getopts ":ex" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -211,8 +210,7 @@ function ShellKit_ccode_SGR_Style() {
                 return 1
                 ;;
         esac
-    done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    done; unset opt; shift $((OPTIND - 1))
 
     local style="bold"
     if (($# >= 1)); then
@@ -263,7 +261,7 @@ function ShellKit_ccode_CSI_Move() {
     local escape=false
     local special=false
     local -i offset=0
-    while getopts ":eso:" opt; do
+    unset OPTIND; while getopts ":eso:" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -276,8 +274,7 @@ function ShellKit_ccode_CSI_Move() {
                 return 1
                 ;;
         esac
-    done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    done; unset opt; shift $((OPTIND - 1))
 
     local move="right"
     if (($# >= 1)); then
@@ -343,7 +340,7 @@ function ShellKit_ccode_CSI_MoveXY() {
     local -i movex=0
     local -i movey=0
 
-    while getopts ":ex:y:" opt; do
+    unset OPTIND; while getopts ":ex:y:" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -362,8 +359,7 @@ function ShellKit_ccode_CSI_MoveXY() {
                 return 1
                 ;;
         esac
-    done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    done; unset opt; shift $((OPTIND - 1))
     if ((movex == 0 && movey == 0)); then
         echo "at least one of -x and -y must appear"
         return 1
@@ -405,7 +401,7 @@ declare -frx ShellKit_ccode_CSI_MoveXY
 #######################################
 function ShellKit_ccode_CSI_MoveSaveRest() {
     local escape=false
-    while getopts ":e" opt; do
+    unset OPTIND; while getopts ":e" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -415,7 +411,7 @@ function ShellKit_ccode_CSI_MoveSaveRest() {
                 ;;
         esac
     done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    shift $((OPTIND - 1))
 
     local action="save"
     if (($# >= 1)); then
@@ -466,7 +462,7 @@ function ShellKit_ccode_CSI_Erase() {
     local escape=false
     local object="line"
     local -i number=0
-    while getopts ":edbn:" opt; do
+    unset OPTIND; while getopts ":edbn:" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -490,7 +486,7 @@ function ShellKit_ccode_CSI_Erase() {
                 ;;
         esac
     done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    shift $((OPTIND - 1))
 
     local -i rangei=0
     local action
@@ -554,7 +550,7 @@ function ShellKit_ccode_CSI_InsDel() {
     local operate="insert"
     local object="lines"
     local -i number=0
-    while getopts ":edbn:" opt; do
+    unset OPTIND; while getopts ":edbn:" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -575,7 +571,7 @@ function ShellKit_ccode_CSI_InsDel() {
                 ;;
         esac
     done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    shift $((OPTIND - 1))
 
     local action
     local CSIseq
@@ -618,7 +614,7 @@ function ShellKit_ccode_ESConly() {
     local -Ar name2char=( [ris]=c [ind]=D [nel]=E [ri]=M )
 
     local escape=false
-    while getopts ":e" opt; do
+    unset OPTIND; while getopts ":e" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -628,7 +624,7 @@ function ShellKit_ccode_ESConly() {
                 ;;
         esac
     done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    shift $((OPTIND - 1))
 
     local item="ris"
     if (($# >= 1)); then
@@ -700,7 +696,7 @@ function ShellKit_ccode_CSI_PriMode() {
 
     local escape=false
     local setoff=false
-    while getopts ":ex" opt; do
+    unset OPTIND; while getopts ":ex" opt; do
         case ${opt} in
             e)
                 escape=true ;;
@@ -712,7 +708,7 @@ function ShellKit_ccode_CSI_PriMode() {
                 ;;
         esac
     done; unset opt
-    shift $((OPTIND - 1)); unset OPTIND
+    shift $((OPTIND - 1))
 
     local mode="scnm"
     if (($# >= 1)); then
