@@ -119,7 +119,7 @@ function ShellKit_wait_for() {
             else
                 skechoe "[${rcount}:${count}] Fail to execute {$*} (${ret})"
             fi
-            return "${SHELLKIT_RET_TIMEOUT}"
+            return "${SHELLKIT_RET_WAITOUT}"
         fi
         if [[ -n "${gap_delta}" ]]; then
             sleep_second=$(ShellKit_get_random -n ${gap_second} -d ${gap_delta})

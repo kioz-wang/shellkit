@@ -8,7 +8,7 @@ else
 fi
 declare -rx ShellKit_ROOT
 
-declare -rx ShellKit_Version=v24.04.12
+declare -rx ShellKit_Version=v24.04.15
 
 declare -rx ShellKit_TEMP=${ShellKit_TEMP:-/tmp}
 
