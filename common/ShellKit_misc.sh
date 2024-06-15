@@ -57,9 +57,9 @@ function ShellKit_get_random() {
     ((delta > 32768)) && return "${SHELLKIT_RET_INVPARAM}"
     ((value = RANDOM % delta + min))
     if ${flag_nonexpan}; then
-        ${SKECHO} "Generate ${value} from [${min},${max}]"
+        ${ECHO} "Generate ${value} from [${min},${max}]"
     else
-        ${SKECHO} -n ${value}
+        ${ECHO} -n ${value}
     fi
 }
 declare -frx ShellKit_get_random
@@ -106,13 +106,13 @@ function ShellKit_wait_for() {
     local -i ret=${SHELLKIT_RET_SUCCESS}
     local -i sleep_second=${gap_second}
     local -i count=0
-    local -i future=$(($(${SKDATE} +%-s) + rtimeout))
+    local -i future=$(($(${DATE} +%-s) + rtimeout))
     local flag_timeout=false
     while true; do
         "$@"
         ret=$?
         ((ret == 0)) && return "${SHELLKIT_RET_SUCCESS}"
-        (($(${SKDATE} +%-s) >= future)) && flag_timeout=true
+        (($(${DATE} +%-s) >= future)) && flag_timeout=true
         if ((count >= rcount)) || ${flag_timeout}; then
             if ${flag_timeout}; then
                 skechoe "[${rcount}:${count}] Fail to execute {$*} (${ret}), timeout(${rtimeout}s)"
@@ -126,7 +126,7 @@ function ShellKit_wait_for() {
         fi
         skechow "[${rcount}:${count}] Fail to execute {$*} (${ret}), retry after ${sleep_second}s"
         ((++count))
-        ${SKSLEEP} ${sleep_second}
+        ${SLEEP} ${sleep_second}
     done
 }
 declare -frx ShellKit_wait_for

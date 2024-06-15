@@ -39,7 +39,7 @@ else
 fi
 
 skechoi
-skechoi "the number of binaries inside binpack is $(${SKCAT} dump_binpack/ifile_num)"
+skechoi "the number of binaries inside binpack is $(${CAT} dump_binpack/ifile_num)"
 skechoi "check the md5 of source and pack-unpack binaries"
 skechoi "source:bin0                       = $(file_get_hash bin0 md5)"
 skechoi "pack-unpack:dump_binpack/ifile0   = $(file_get_hash dump_binpack/ifile0 md5)"

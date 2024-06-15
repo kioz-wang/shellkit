@@ -54,7 +54,7 @@ function control_check() {
     local control_word
 
     if [[ -r "${control_file}" ]]; then
-        control_word=$(${SKCAT} "${control_file}")
+        control_word=$(${CAT} "${control_file}")
         true > "${control_file}"
         if [[ -n "${control_word}" ]]; then
             case "${control_word}" in
@@ -77,7 +77,7 @@ function control_check() {
 function sleep_in_pause() {
     local -i sleep_arg=$1
 
-    ${SKSLEEP} $((++pause_sleep_arg))
+    ${SLEEP} $((++pause_sleep_arg))
     if ((pause_sleep_arg >= sleep_arg)); then
         ((pause_sleep_arg = 0))
     fi

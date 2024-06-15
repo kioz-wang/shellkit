@@ -61,10 +61,10 @@ if ((ret == 0)); then
 fi
 
 if ((ret == 0)); then
-    ifile_num=$(${SKCAT} "${odir}/ifile_num")
+    ifile_num=$(${CAT} "${odir}/ifile_num")
     for (( i=0; i < ifile_num; i++ )); do
-        ${SKMV} "${odir}/ifile$i" "${odir}/ifile${i}.y"
-        ${SKRM} "${odir}/ifile${i}.hash"
+        ${MV} "${odir}/ifile$i" "${odir}/ifile${i}.y"
+        ${RM} "${odir}/ifile${i}.hash"
         _ld_ifile_y_lst[i]="${odir}/ifile${i}.y"
     done; unset i
 fi
@@ -82,7 +82,7 @@ fi
 
 for _file in "${_ld_ifile_y_lst[@]}" "${_ld_raw_file}" "${_ld_sign_file}"; do
     if file_access_r "${_file}"; then
-        ${SKRM} "${_file}"
+        ${RM} "${_file}"
         skechov "remove ${_file}"
     fi
 done; unset _file

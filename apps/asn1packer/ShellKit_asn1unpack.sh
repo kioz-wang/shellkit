@@ -51,21 +51,21 @@ function parse_dump_by_idx() {
     local check_hash
     local -i flag_extglob=0
 
-    parse_result_length=$(${SKGREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SKSED} -n 2p)
+    parse_result_length=$(${GREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SED} -n 2p)
     parse_result_length=0x${parse_result_length##*:}
     skechod "[parse]:${parse_idx} length ${parse_result_length}"
 
-    parse_result_hash=$(${SKGREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SKSED} -n 3p)
+    parse_result_hash=$(${GREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SED} -n 3p)
     parse_result_hash=${parse_result_hash##*:}
-    ${SKECHO} -n "${parse_result_hash}" > "${odir}/ifile${parse_idx}.hash"
+    ${ECHO} -n "${parse_result_hash}" > "${odir}/ifile${parse_idx}.hash"
     skechov "[parse]:${parse_idx} hash ${parse_result_hash} -> ${odir}/ifile${parse_idx}.hash"
 
-    ${SKGREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SKSED} -n 4p \
-        | ${SKSED} 's/^.*OCTET STRING[ ]*://g'    \
+    ${GREP} -A 3 "prim: IA5STRING[ ]*:ifile${parse_idx}" "${_gd_parse_file}" | ${SED} -n 4p \
+        | ${SED} 's/^.*OCTET STRING[ ]*://g'    \
         | file_base64 d > "${odir}/ifile${parse_idx}"
     skechov "[parse]:${parse_idx} context -> ${odir}/ifile${parse_idx}"
 
-    check_hash=$(file_get_hash "${odir}/ifile${parse_idx}" sha256 | ${SKSED} 's/[a-z]/\u&/g')
+    check_hash=$(file_get_hash "${odir}/ifile${parse_idx}" sha256 | ${SED} 's/[a-z]/\u&/g')
     if shopt -q extglob; then
         flag_extglob=1
     else
@@ -85,7 +85,7 @@ function parse_dump_by_idx() {
 }
 
 if ((ret == 0)); then
-    if ${SKOPENSSL} asn1parse -inform der -in "${ifile}" > "${_gd_parse_file}"; then
+    if ${OPENSSL} asn1parse -inform der -in "${ifile}" > "${_gd_parse_file}"; then
         skechov "generate asn1 formatter: ${_gd_parse_file}"
     else
         skechov "fail to generate asn1 formatter: ${_gd_parse_file} ($?)"
@@ -94,8 +94,8 @@ if ((ret == 0)); then
 fi
 
 if ((ret == 0)); then
-    ifile_num=$(${SKGREP} -c "prim: IA5STRING[ ]*:ifile" "${_gd_parse_file}")
-    ${SKECHO} -n ${ifile_num} > "${odir}/ifile_num"
+    ifile_num=$(${GREP} -c "prim: IA5STRING[ ]*:ifile" "${_gd_parse_file}")
+    ${ECHO} -n ${ifile_num} > "${odir}/ifile_num"
     # shellcheck disable=SC2086
     if [[ -v idx ]] && ((idx >= ifile_num)); then
         skechoe "out of index ${idx}, total ${ifile_num}"
@@ -117,7 +117,7 @@ if ((ret == 0)); then
 fi
 
 if file_access_r "${_gd_parse_file}"; then
-    ${SKRM} "${_gd_parse_file}"
+    ${RM} "${_gd_parse_file}"
     skechov "remove asn1 formatter: ${_gd_parse_file}"
 fi
 

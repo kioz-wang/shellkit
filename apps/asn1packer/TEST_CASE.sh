@@ -57,14 +57,14 @@ else
 fi
 
 skechoi
-skechoi "the number of binaries inside binpack_012space is $(${SKCAT} dump_binpack_012space/ifile_num)"
+skechoi "the number of binaries inside binpack_012space is $(${CAT} dump_binpack_012space/ifile_num)"
 skechoi "check the md5 of source and pack-unpack binaries indexed 2"
 skechoi "source:bin2                               = $(file_get_hash bin2 md5)"
 skechoi "pack-unpack:dump_binpack_012space/ifile2  = $(file_get_hash dump_binpack_012space/ifile2 md5)"
 skechoi
 
 skechoi
-skechoi "the number of binaries inside binpack_76 is $(${SKCAT} dump_binpack_76/ifile_num)"
+skechoi "the number of binaries inside binpack_76 is $(${CAT} dump_binpack_76/ifile_num)"
 skechoi "check the md5 of source and pack-unpack binaries"
 skechoi "source:bin7                           = $(file_get_hash bin7 md5)"
 skechoi "pack-unpack:dump_binpack_76/ifile0    = $(file_get_hash dump_binpack_76/ifile0 md5)"

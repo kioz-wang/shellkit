@@ -32,7 +32,7 @@ skechod
 
 declare -i ret=${SHELLKIT_RET_SUCCESS}
 
-${SKCAT} > "${_gd_conf_file}" <<EOF
+${CAT} > "${_gd_conf_file}" <<EOF
 asn1=SEQ:ofile
 
 [ofile]
@@ -40,12 +40,12 @@ EOF
 skechod "write asn1 formatter head-part into ${_gd_conf_file}"
 
 for (( i=0; i < ifile_num; i++ )); do
-    ${SKECHO} "ifile$i = SEQ:ifile$i" >> "${_gd_conf_file}"
+    ${ECHO} "ifile$i = SEQ:ifile$i" >> "${_gd_conf_file}"
 done; unset i
 skechod "write asn1 formatter ofile-part into ${_gd_conf_file}"
 
 for (( i=0; i < ifile_num; i++ )); do
-    ${SKCAT} >> "${_gd_conf_file}" <<EOF
+    ${CAT} >> "${_gd_conf_file}" <<EOF
 
 [ifile$i]
 name    = IA5STRING:ifile$i
@@ -59,7 +59,7 @@ skechod "write asn1 formatter ifiles-part into ${_gd_conf_file}"
 skechov "generate asn1 formatter: ${_gd_conf_file}"
 
 if ((ret == 0)); then
-    if ${SKOPENSSL} asn1parse -genconf "${_gd_conf_file}" -out "${ofile}" -noout; then
+    if ${OPENSSL} asn1parse -genconf "${_gd_conf_file}" -out "${ofile}" -noout; then
         skechov "generate ${ofile} packed ${ifile_lst[*]}"
     else
         skechov "fail to generate ${ofile} packed ${ifile_lst[*]} ($?)"
@@ -68,7 +68,7 @@ if ((ret == 0)); then
 fi
 
 if file_access_r "${_gd_conf_file}"; then
-    ${SKRM} "${_gd_conf_file}"
+    ${RM} "${_gd_conf_file}"
     skechov "remove asn1 formatter: ${_gd_conf_file}"
 fi
 

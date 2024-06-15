@@ -2,7 +2,7 @@
 
 function file_get_size() {
     local file_path=$1
-    ${SKWC} -c < "${file_path}"
+    ${WC} -c < "${file_path}"
 }
 declare -frx file_get_size
 
@@ -11,8 +11,8 @@ function file_get_hash() {
     # Specifies name of the digest to be used. See by `openssl dgst -list`
     local openssl_dgst=$2
     local openssl_dgst_result
-    openssl_dgst_result=$(${SKOPENSSL} dgst "-${openssl_dgst}" "${file_path}")
-    ${SKECHO} -n "${openssl_dgst_result##*= }"
+    openssl_dgst_result=$(${OPENSSL} dgst "-${openssl_dgst}" "${file_path}")
+    ${ECHO} -n "${openssl_dgst_result##*= }"
 }
 declare -frx file_get_hash
 
@@ -26,7 +26,7 @@ function file_base64() {
     if [[ -n "${file_path}" ]]; then
         local -ar param_in=("-in" "${file_path}")
     fi
-    ${SKOPENSSL} base64 -A "-${openssl_dir}" "${param_in[@]}"
+    ${OPENSSL} base64 -A "-${openssl_dir}" "${param_in[@]}"
 }
 declare -frx file_base64
 

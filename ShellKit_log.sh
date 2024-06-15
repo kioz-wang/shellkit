@@ -35,7 +35,7 @@ function sktimestamp() {
         *)
             return 0 ;;
     esac
-    ${SKDATE:?} +"${SHELLKIT_LOG_TIMESTAMP_PREFIX}${date_format}${SHELLKIT_LOG_TIMESTAMP_SUFFIX}"
+    ${DATE:?} +"${SHELLKIT_LOG_TIMESTAMP_PREFIX}${date_format}${SHELLKIT_LOG_TIMESTAMP_SUFFIX}"
 }
 declare -frx sktimestamp
 

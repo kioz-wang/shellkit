@@ -20,7 +20,7 @@ function ShellKit_assert_env() {
     local epath="${!einfo:1:1}"
     local echeck=("${!einfo:2}")
 
-    ename="SK${ename@U}"
+    ename="${ename@U}"
     # echo "einfo name(${ename}) path(${epath}) check(${echeck[*]})"
     if [[ -v "${ename}" ]]; then
         # echo "einfo Already (${ename}=${!ename})"

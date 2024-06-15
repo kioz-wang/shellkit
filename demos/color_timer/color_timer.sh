@@ -39,14 +39,14 @@ function blink_screen() {
 
     for ((i=0; i<times; i++)); do
         ShellKit_ccode_CSI_PriMode -e scnm
-        ${SKSLEEP} "${timegap}"
+        ${SLEEP} "${timegap}"
         ShellKit_ccode_CSI_PriMode -ex scnm
-        ${SKSLEEP} "${timegap}"
+        ${SLEEP} "${timegap}"
     done; unset i
 }
 
 function set_start() {
-    timer_start=$(${SKDATE} +%s)
+    timer_start=$(${DATE} +%s)
 }
 
 function set_clock() {
@@ -56,7 +56,7 @@ function set_clock() {
 
 function check_clock() {
     local -i timer_now
-    timer_now=$(${SKDATE} +%s)
+    timer_now=$(${DATE} +%s)
     [[ timer_now -ge timer_clock ]]
 }
 
@@ -73,7 +73,7 @@ function _get_now() {
     # shellcheck disable=SC2034
     read -rs year_ref month_ref day_ref week_ref    \
         hour_ref minute_ref second_ref              \
-        <<< "$(${SKDATE} +"%Y %m %d %a %H %M %S")"
+        <<< "$(${DATE} +"%Y %m %d %a %H %M %S")"
 }
 
 # Dprecated
@@ -83,14 +83,14 @@ function _show_date_time() {
     ShellKit_ccode_CSI_MoveXY -e -x999 -y1
     ShellKit_ccode_CSI_Move -e -o15 left
     ShellKit_ccode_CSI_CPR top_left_x top_left_y
-    ${SKECHO} -en "${STYLE_YEAR}${year}${STYLE_RESET} "
-    ${SKECHO} -en "${STYLE_MONTH}${month}${STYLE_RESET} "
-    ${SKECHO} -en "${STYLE_DAY}${day}${STYLE_RESET}"
+    ${ECHO} -en "${STYLE_YEAR}${year}${STYLE_RESET} "
+    ${ECHO} -en "${STYLE_MONTH}${month}${STYLE_RESET} "
+    ${ECHO} -en "${STYLE_DAY}${day}${STYLE_RESET}"
     ShellKit_ccode_CSI_MoveXY -e -x $((top_left_x-1)) -y $((top_left_y += 1))
-    ${SKECHO} -en "${STYLE_WEEK}${week}${STYLE_RESET} "
-    ${SKECHO} -en "${STYLE_HOUR}${hour}${STYLE_RESET}:"
-    ${SKECHO} -en "${STYLE_MINUTE}${minute}${STYLE_RESET}:"
-    ${SKECHO} -en "${STYLE_SECOND}${second}${STYLE_RESET}"
+    ${ECHO} -en "${STYLE_WEEK}${week}${STYLE_RESET} "
+    ${ECHO} -en "${STYLE_HOUR}${hour}${STYLE_RESET}:"
+    ${ECHO} -en "${STYLE_MINUTE}${minute}${STYLE_RESET}:"
+    ${ECHO} -en "${STYLE_SECOND}${second}${STYLE_RESET}"
     ShellKit_ccode_CSI_MoveSaveRest -e restore
 }
 
@@ -101,29 +101,29 @@ function __show_date_time() {
     ShellKit_ccode_CSI_MoveXY -e -x999 -y1
     ShellKit_ccode_CSI_Move -e -o15 left
     ShellKit_ccode_CSI_CPR top_left_x top_left_y
-    ${SKECHO} -en "$(
-        ${SKDATE} +"${STYLE_YEAR}%Y${STYLE_RESET} ${STYLE_MONTH}%m${STYLE_RESET} ${STYLE_DAY}%d${STYLE_RESET}"
+    ${ECHO} -en "$(
+        ${DATE} +"${STYLE_YEAR}%Y${STYLE_RESET} ${STYLE_MONTH}%m${STYLE_RESET} ${STYLE_DAY}%d${STYLE_RESET}"
     )"
     ShellKit_ccode_CSI_MoveXY -e -x $((top_left_x-1)) -y $((top_left_y += 1))
-    ${SKECHO} -en "$(
-        ${SKDATE} +"${STYLE_WEEK}%a${STYLE_RESET} ${STYLE_HOUR}%H${STYLE_RESET}:${STYLE_MINUTE}%M${STYLE_RESET}:${STYLE_SECOND}%S${STYLE_RESET}"
+    ${ECHO} -en "$(
+        ${DATE} +"${STYLE_WEEK}%a${STYLE_RESET} ${STYLE_HOUR}%H${STYLE_RESET}:${STYLE_MINUTE}%M${STYLE_RESET}:${STYLE_SECOND}%S${STYLE_RESET}"
     )"
     ShellKit_ccode_CSI_MoveSaveRest -e restore
 }
 
 function show_date_time() {
     local -i top_left_x top_left_y
-    top_left_x=$(${SKTPUT} cols)
+    top_left_x=$(${TPUT} cols)
     top_left_y=1
     ShellKit_ccode_CSI_MoveSaveRest -e
     ShellKit_ccode_CSI_MoveXY -e -x $((top_left_x-15)) -y $((top_left_y)) "$(
         ShellKit_ccode_CSI_Erase -e whole "$(
-            ${SKDATE} +"${STYLE_YEAR}%Y${STYLE_RESET} ${STYLE_MONTH}%m${STYLE_RESET} ${STYLE_DAY}%d${STYLE_RESET}"
+            ${DATE} +"${STYLE_YEAR}%Y${STYLE_RESET} ${STYLE_MONTH}%m${STYLE_RESET} ${STYLE_DAY}%d${STYLE_RESET}"
         )"
     )"
     ShellKit_ccode_CSI_MoveXY -e -x $((top_left_x-16)) -y $((top_left_y+1)) "$(
         ShellKit_ccode_CSI_Erase -e whole "$(
-            ${SKDATE} +"${STYLE_WEEK}%a${STYLE_RESET} ${STYLE_HOUR}%H${STYLE_RESET}:${STYLE_MINUTE}%M${STYLE_RESET}:${STYLE_SECOND}%S${STYLE_RESET}"
+            ${DATE} +"${STYLE_WEEK}%a${STYLE_RESET} ${STYLE_HOUR}%H${STYLE_RESET}:${STYLE_MINUTE}%M${STYLE_RESET}:${STYLE_SECOND}%S${STYLE_RESET}"
         )"
     )"
     ShellKit_ccode_CSI_MoveSaveRest -e restore
@@ -151,12 +151,12 @@ function main() {
     set_clock "${isec}"
 
     until check_clock; do
-        ${SKSLEEP} 0.1
+        ${SLEEP} 0.1
         # _get_now year month day week hour minute second
         # _show_date_time
         show_date_time
     done
-    ${SKECHO} -e "${STYLE_MESSAGE}${imsg}${STYLE_RESET}"
+    ${ECHO} -e "${STYLE_MESSAGE}${imsg}${STYLE_RESET}"
     blink_screen 5 0.02
 
     return ${ret}

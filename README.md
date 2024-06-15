@@ -154,15 +154,15 @@ date +v%y.%-m.%-d
 ### assert_env
 
 ```
-einfo name(SKECHO) path(/usr/bin/echo) check(--version)
-einfo name(SKCAT) path(/usr/bin/cat) check(--version)
-einfo name(SKSLEEP) path(/usr/bin/sleep) check(--version)
-einfo name(SKOPENSSL) path(/usr/bin/openssl) check(version)
-einfo name(SKRM) path(/usr/bin/rm) check(--version)
-einfo name(SKWC) path(/usr/bin/wc) check(--version)
-einfo name(SKLS) path(/usr/bin/ls) check(--version)
-einfo name(SKMV) path(/usr/bin/mv) check(--version)
-einfo name(SKGREP) path(/usr/bin/grep) check(--version)
+einfo name(ECHO) path(/usr/bin/echo) check(--version)
+einfo name(CAT) path(/usr/bin/cat) check(--version)
+einfo name(SLEEP) path(/usr/bin/sleep) check(--version)
+einfo name(OPENSSL) path(/usr/bin/openssl) check(version)
+einfo name(RM) path(/usr/bin/rm) check(--version)
+einfo name(WC) path(/usr/bin/wc) check(--version)
+einfo name(LS) path(/usr/bin/ls) check(--version)
+einfo name(MV) path(/usr/bin/mv) check(--version)
+einfo name(GREP) path(/usr/bin/grep) check(--version)
 ```
 
 ### console_codes
