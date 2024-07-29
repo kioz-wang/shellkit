@@ -25,6 +25,7 @@ function ShellKit_assert_env() {
     local -r STY_VERB="\e[2m"
     # shellcheck disable=SC2034
     local -r STY_INFO="\e[92m"
+    # shellcheck disable=SC2034
     local -r STY_WARN="\e[48;2;255;255;0m"
     local -r STY_ERRO="\e[41m"
     local -r STY_REST="\e[0m"
