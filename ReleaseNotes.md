@@ -1,3 +1,19 @@
+# Release Note v24.08.08
+
+- [log]
+    - [echo]
+        - 优化显示效果（减少一些闪烁）
+        - 自适应显示 appname
+    - 新增时间戳配置
+        - `SHELLKIT_LOG_TIMESTAMP_PREFIX`
+        - `SHELLKIT_LOG_TIMESTAMP_CUSTOM`
+        - `SHELLKIT_LOG_TIMESTAMP_SUFFIX`
+- 优化使用更强大的 compound command
+- [console_codes] 修复输出会被上次异常调用影响的问题
+- [common] 新增函数 get_random, wait_for
+- [demo:aging] 新增 aging 用于老化场景
+- [assert_env] 自动检测命令路径（由`command`支持）
+
 # Release Note v23.12.20
 
 - [assert_env] 支持断言带空格的系统命令，如 `toybox sed`
